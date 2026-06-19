@@ -183,6 +183,22 @@ class DuplicatePreviewRequest(BaseModel):
     redis_mode: str | None = None
 
 
+class MockInterviewPerson(BaseModel):
+    id: str | None = None
+    name: str = Field(..., min_length=1)
+    company: str = ""
+    role: str = ""
+    location: str = ""
+    interests: list[str] = Field(default_factory=list)
+    how_we_met: str = ""
+    source: str = ""
+
+
+class MockInterviewRequest(BaseModel):
+    person: MockInterviewPerson
+    mode: str | None = None
+
+
 def _redact_redis_endpoint(value: str) -> str:
     return REDIS_ENDPOINT_RE.sub("redis:connected", value)
 
@@ -208,6 +224,213 @@ def _redact_monitor_payload(value: Any) -> Any:
     if isinstance(value, dict):
         return {key: _redact_monitor_payload(item) for key, item in value.items()}
     return value
+
+
+def _contains_any(text: str, keywords: tuple[str, ...]) -> bool:
+    lowered = text.lower()
+    return any(keyword in lowered for keyword in keywords)
+
+
+def _mock_interview_track(person: MockInterviewPerson) -> dict[str, str]:
+    role = person.role.strip()
+    company = person.company.strip()
+    how_we_met = person.how_we_met.strip()
+    interests = ", ".join(person.interests)
+    haystack = " ".join([role, company, how_we_met, interests])
+
+    if _contains_any(haystack, ("recruit", "hiring", "talent", "people ops", "hr")):
+        return {
+            "id": "recruiter_screen",
+            "label": "Recruiter screen",
+            "objective": "Earn a next-round conversation by showing fit, crisp storytelling, and a clear reason for interest.",
+            "personality": "Busy but supportive recruiter who checks motivation, communication, and role fit.",
+        }
+    if _contains_any(haystack, ("investor", "venture", "fund", "angel", "capital")):
+        return {
+            "id": "investor_intro",
+            "label": "Investor intro",
+            "objective": "Practice a concise pitch, defend the core insight, and leave the conversation with a concrete follow-up.",
+            "personality": "Sharp, skeptical investor who pushes on traction, differentiation, and why now.",
+        }
+    if _contains_any(haystack, ("sales", "customer", "growth", "operations", "marketplace", "service")):
+        return {
+            "id": "customer_discovery",
+            "label": "Customer discovery",
+            "objective": "Learn pain points, test problem resonance, and end with a clear next step or pilot signal.",
+            "personality": "Curious but pragmatic operator who cares about workflow pain, ROI, and implementation risk.",
+        }
+    if _contains_any(haystack, ("engineer", "research", "ml", "ai", "product", "developer")):
+        return {
+            "id": "technical_networking",
+            "label": "Technical networking",
+            "objective": "Practice a technical but human conversation that earns a follow-up without sounding like a cold pitch.",
+            "personality": "Thoughtful technical peer who asks about tradeoffs, product instincts, and real execution details.",
+        }
+    return {
+        "id": "warm_networking",
+        "label": "Warm networking",
+        "objective": "Build rapport quickly, make a specific ask, and leave with a natural next step.",
+        "personality": "Friendly but time-boxed contact who is open to helping if the conversation feels thoughtful and relevant.",
+    }
+
+
+def _mock_interview_assistant_prompt(person: MockInterviewPerson, track: dict[str, str]) -> str:
+    interests = ", ".join(person.interests) or "No explicit interests available"
+    company = person.company or "Unknown company"
+    role = person.role or "Unknown role"
+    location = person.location or "Unknown location"
+    how_we_met = person.how_we_met or "Unknown connection context"
+    source = person.source or "Unknown source"
+
+    return "\n".join(
+        [
+            f"You are roleplaying {person.name}, a contact in the user's network.",
+            f"Known profile: {role} at {company}. Location: {location}. Interests: {interests}.",
+            f"Connection context: {how_we_met}. Source: {source}.",
+            f"Interview mode: {track['label']}. Objective: {track['objective']}",
+            "",
+            "Behavior rules:",
+            f"- Adopt this conversational personality: {track['personality']}",
+            "- Stay grounded in the profile above. Do not invent resume facts, company history, or personal details.",
+            "- If the profile is sparse, say so naturally and keep the conversation higher-level.",
+            "- Ask realistic follow-up questions, challenge vague answers, and reward specificity.",
+            "- End the conversation once a clear next step, pass, or polite stop signal has been reached.",
+        ]
+    )
+
+
+def _mock_interview_scenario(person: MockInterviewPerson, track: dict[str, str]) -> dict[str, Any]:
+    target_name = person.name
+    company = person.company or "their company"
+    role = person.role or "their role"
+
+    caller_instructions = {
+        "recruiter_screen": "\n".join(
+            [
+                f"You are preparing for a recruiter-style screening call with {target_name}.",
+                f"Explain why you are interested in {company} and why your background fits {role}.",
+                "Give one concrete example with measurable impact.",
+                "Ask at least one thoughtful question about the role or team.",
+                "Try to earn a clear next step before ending the conversation.",
+            ]
+        ),
+        "investor_intro": "\n".join(
+            [
+                f"You are speaking with {target_name} as if they were considering an intro or investor-style follow-up.",
+                "Explain the problem, your insight, and why now in under one minute.",
+                "Handle pushback on differentiation or traction with specific evidence.",
+                "End with a concrete next step such as a deeper meeting or materials follow-up.",
+            ]
+        ),
+        "customer_discovery": "\n".join(
+            [
+                f"You are running a discovery conversation with {target_name}.",
+                "Lead with curiosity, not a hard sell.",
+                "Uncover the most painful workflow problem they have today.",
+                "Reflect back what you heard and test whether a next meeting or pilot makes sense.",
+            ]
+        ),
+        "technical_networking": "\n".join(
+            [
+                f"You are having a technical networking conversation with {target_name}.",
+                "Introduce yourself crisply and anchor the conversation in shared interests.",
+                "Describe one concrete technical project and one product or user insight.",
+                "Ask for advice, perspective, or a warm follow-up instead of forcing a pitch.",
+            ]
+        ),
+        "warm_networking": "\n".join(
+            [
+                f"You are reconnecting with {target_name} for a warm networking chat.",
+                "Open with relevant context, build rapport quickly, and make one specific ask.",
+                "Keep the conversation practical and end with a natural follow-up.",
+            ]
+        ),
+    }
+
+    return {
+        "scenario_name": f"{track['label']} with {target_name}",
+        "personality_name": f"{track['label']} tester",
+        "personality_description": "Ambitious but coachable caller who is trying to improve real-world conversation quality.",
+        "tester_instructions": caller_instructions[track["id"]],
+        "evaluations": [
+            {
+                "name": "rapport_built",
+                "schema_type": "boolean",
+                "comparator": "=",
+                "expected_value": True,
+                "required": True,
+                "description": "Did the caller establish rapport rather than sounding cold or generic?",
+            },
+            {
+                "name": "specific_ask_made",
+                "schema_type": "boolean",
+                "comparator": "=",
+                "expected_value": True,
+                "required": True,
+                "description": "Did the caller make a clear, concrete ask or objective visible in the conversation?",
+            },
+            {
+                "name": "next_step_secured",
+                "schema_type": "boolean",
+                "comparator": "=",
+                "expected_value": True,
+                "required": True,
+                "description": "Did the conversation end with a specific next step, follow-up, or explicit pass?",
+            },
+            {
+                "name": "conversation_quality_score",
+                "schema_type": "number",
+                "comparator": ">=",
+                "expected_value": 4,
+                "required": True,
+                "description": "Overall conversation quality on a 1-5 scale.",
+            },
+        ],
+    }
+
+
+def _build_mock_interview_brief(request: MockInterviewRequest) -> dict[str, Any]:
+    person = request.person
+    track = _mock_interview_track(person)
+    recommended_mode = request.mode or "voice"
+    opening_line = (
+        f"Hi {person.name}, thanks for taking the time. I wanted to use this chat to pressure-test "
+        f"how I'd introduce myself and make a thoughtful ask in a {track['label'].lower()} setting."
+    )
+
+    return {
+        "contact": person.model_dump(),
+        "recommended_mode": recommended_mode,
+        "supported_modes": ["voice", "chat"],
+        "track": {
+            "id": track["id"],
+            "label": track["label"],
+            "objective": track["objective"],
+        },
+        "assistant": {
+            "suggested_name": f"Contax Mock Interview - {person.name}",
+            "first_message": f"Hi, this is {person.name}. Nice to meet you. What would you like to discuss today?",
+            "system_prompt": _mock_interview_assistant_prompt(person, track),
+            "variable_values": {
+                "contactName": person.name,
+                "company": person.company,
+                "role": person.role,
+                "location": person.location,
+                "interests": ", ".join(person.interests),
+                "howWeMet": person.how_we_met,
+                "track": track["label"],
+            },
+        },
+        "simulation": _mock_interview_scenario(person, track),
+        "starter_line": opening_line,
+        "validation_plan": [
+            "Create or update a Vapi assistant with the suggested name, first message, and system prompt.",
+            "Create structured outputs matching the listed evaluations.",
+            "In Simulations, create a scenario from the tester instructions and attach the evaluations.",
+            "Create a simulation that pairs the scenario with a fitting personality, then run it in voice first and chat second.",
+            "Treat legacy Test Suites / Voice Testing as fallback only; use Simulations as the main validation path.",
+        ],
+    }
 
 
 @app.get("/api/health")
@@ -428,6 +651,11 @@ def get_prm_duplicate_reviews(redis_mode: str | None = None) -> dict[str, Any]:
         return {"redis_status": store.status, "count": len(reviews), "reviews": reviews}
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+
+@app.post("/api/mock-interview/brief")
+def prepare_mock_interview_brief(request: MockInterviewRequest) -> dict[str, Any]:
+    return _build_mock_interview_brief(request)
 
 
 @app.post("/api/prm/dedupe/preview")

@@ -182,3 +182,64 @@ export type MatchResponse = {
     recommendations: Recommendation[];
   };
 };
+
+export type MockInterviewEvaluation = {
+  name: string;
+  schema_type: "boolean" | "number" | string;
+  comparator: "=" | ">=" | "<=" | ">" | "<" | string;
+  expected_value: boolean | number | string;
+  required: boolean;
+  description: string;
+};
+
+export type MockInterviewBriefResponse = {
+  contact: {
+    id?: string | null;
+    name: string;
+    company: string;
+    role: string;
+    location: string;
+    interests: string[];
+    how_we_met: string;
+    source: string;
+  };
+  recommended_mode: "voice" | "chat" | string;
+  supported_modes: Array<"voice" | "chat" | string>;
+  track: {
+    id: string;
+    label: string;
+    objective: string;
+  };
+  assistant: {
+    suggested_name: string;
+    first_message: string;
+    system_prompt: string;
+    variable_values: Record<string, string>;
+  };
+  simulation: {
+    scenario_name: string;
+    personality_name: string;
+    personality_description: string;
+    tester_instructions: string;
+    evaluations: MockInterviewEvaluation[];
+  };
+  starter_line: string;
+  validation_plan: string[];
+};
+
+export type MockInterviewVapiMode = "chat" | "eval";
+
+export type MockInterviewVapiResponse = {
+  provider: "vapi";
+  mode: MockInterviewVapiMode;
+  status: "completed" | "queued" | "billing_required" | "error";
+  summary: string;
+  detail?: string;
+  assistant_reply?: string | null;
+  assistant_id?: string;
+  assistant_name?: string;
+  run_id?: string;
+  workflow_id?: string;
+  result_status?: string | null;
+  raw?: unknown;
+};

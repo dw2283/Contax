@@ -2,14 +2,20 @@ import type {
   DeleteDemoResponse,
   IngestResponse,
   MatchResponse,
+  MockInterviewBriefResponse,
+  MockInterviewVapiMode,
+  MockInterviewVapiResponse,
   PeopleExportResponse,
   PeopleResponse,
   SeedResponse,
   Source,
+  Person,
   UploadItem,
 } from "./types";
 
-export const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+// Default to a same-origin proxy so local browsers do not need to call the
+// FastAPI port directly.
+export const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "/backend";
 
 // Leave undefined by default so the backend's .env decides.
 // Set NEXT_PUBLIC_* only when you explicitly want the browser to override it.
@@ -164,6 +170,42 @@ export async function matchPeople(query: string): Promise<MatchResponse> {
       ...weaveModeBody(),
       ...redisModeBody(),
     }),
+  });
+  if (!response.ok) throw new Error(await parseError(response));
+  return response.json();
+}
+
+/** Build a Vapi-ready mock interview brief for a selected contact. */
+export async function prepareMockInterview(person: Person): Promise<MockInterviewBriefResponse> {
+  const response = await fetch(`${API_BASE}/api/mock-interview/brief`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      person: {
+        id: person.id,
+        name: person.name,
+        company: person.company,
+        role: person.role,
+        location: person.location,
+        interests: person.interests,
+        how_we_met: person.how_we_met,
+        source: person.source,
+      },
+    }),
+  });
+  if (!response.ok) throw new Error(await parseError(response));
+  return response.json();
+}
+
+/** Run a server-side Vapi validation against the prepared mock interview brief. */
+export async function validateMockInterviewWithVapi(
+  brief: MockInterviewBriefResponse,
+  mode: MockInterviewVapiMode,
+): Promise<MockInterviewVapiResponse> {
+  const response = await fetch("/api/mock-interview/vapi", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ brief, mode }),
   });
   if (!response.ok) throw new Error(await parseError(response));
   return response.json();

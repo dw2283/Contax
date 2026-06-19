@@ -9,6 +9,34 @@ from api_server import _public_redis_status, _redact_monitor_payload, app
 
 
 class ApiServerTest(unittest.TestCase):
+    def test_mock_interview_brief_endpoint(self) -> None:
+        client = TestClient(app)
+
+        response = client.post(
+            "/api/mock-interview/brief",
+            json={
+                "person": {
+                    "id": "p1",
+                    "name": "Jordan Blake",
+                    "company": "Northstar Labs",
+                    "role": "Recruiter",
+                    "location": "San Francisco",
+                    "interests": ["security", "enterprise AI"],
+                    "how_we_met": "LinkedIn intro",
+                    "source": "linkedin",
+                }
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data["contact"]["name"], "Jordan Blake")
+        self.assertEqual(data["track"]["id"], "recruiter_screen")
+        self.assertEqual(data["recommended_mode"], "voice")
+        self.assertIn("system_prompt", data["assistant"])
+        self.assertGreaterEqual(len(data["simulation"]["evaluations"]), 3)
+        self.assertIn("Simulations", data["validation_plan"][2])
+
     def test_monitor_payload_redacts_redis_endpoints(self) -> None:
         payload = {
             "runs": {
