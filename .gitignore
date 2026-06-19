@@ -1,0 +1,20 @@
+# Secrets / local runtime config
+.env
+.env.local
+.env.*
+!.env.example
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Node / Next.js
+node_modules/
+.next/
+next-env.d.ts
+
+# Private real contacts (per README privacy notes)
+private_contacts/
+real_contacts/
+contact_exports/

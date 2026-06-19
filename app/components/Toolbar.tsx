@@ -32,7 +32,7 @@ function storageLabel(status: string): string {
   return "Local demo";
 }
 
-/** Top toolbar: one upload action, Clear highlight, and Weave trace. */
+/** Top toolbar: brand + nav on the left, the core actions in the middle, Weave trace on the right. */
 export function Toolbar({
   peopleCount,
   redisStatus,
@@ -47,49 +47,50 @@ export function Toolbar({
   const displayStatus = storageLabel(redisStatus);
 
   return (
-    <>
-      <header className="graph-upload-toolbar">
-        <div className="toolbar-brand">
-          <span className="brand-logo">
-            <Image src="/logo-contax-c-multi-connected.png" alt="" width={44} height={44} priority />
-          </span>
-          <div>
-            <h1>Contax AI</h1>
-            <p>{peopleCount} people · {displayStatus}</p>
-          </div>
-          <nav className="app-nav">
-            <span className="nav-link active"><Network size={15} /> Graph</span>
-            <Link href="/monitor" className="nav-link"><Activity size={15} /> Monitor</Link>
-          </nav>
-        </div>
+    <header className="graph-upload-toolbar">
+      <div className="toolbar-brand">
+        <span className="brand-logo">
+          <Image src="/logo-contax.png" alt="" width={28} height={28} priority />
+        </span>
+        <span className="brand-name">Contax AI</span>
+        <span className="brand-divider" />
+        <nav className="app-nav">
+          <span className="nav-link active"><Network size={13} /> Graph</span>
+          <Link href="/monitor" className="nav-link"><Activity size={13} /> Monitor</Link>
+        </nav>
+        <span className="toolbar-status">
+          <span className="status-dot" />
+          {peopleCount} people · {displayStatus}
+        </span>
+      </div>
 
-        <div className="upload-cluster">
-          <label className={`upload-button primary-action upload-new-contacts ${isBusy ? "disabled" : ""}`}>
-            {isBusy ? <Loader2 className="spin" size={16} /> : <Upload size={16} />}
-            <span>{isSeeding ? "Preparing graph" : isIngesting ? "Processing contacts" : "Upload New Contacts"}</span>
-            <input accept="image/*" disabled={isBusy} multiple type="file" onChange={onChooseFiles} />
-          </label>
-          <button className="toolbar-button" type="button" disabled={isBusy} onClick={onSeedDemo}>
-            <Plus size={15} />
-            Load demo
-          </button>
-          <button className="toolbar-button" type="button" onClick={onClearHighlights}>
-            <X size={15} />
-            Clear highlight
-          </button>
-        </div>
+      <div className="upload-cluster">
+        <label className={`upload-button primary-action upload-new-contacts ${isBusy ? "disabled" : ""}`}>
+          {isBusy ? <Loader2 className="spin" size={14} /> : <Upload size={14} />}
+          <span>{isSeeding ? "Preparing graph" : isIngesting ? "Processing" : "Upload contacts"}</span>
+          <input accept="image/*" disabled={isBusy} multiple type="file" onChange={onChooseFiles} />
+        </label>
+        <button className="toolbar-button" type="button" disabled={isBusy} onClick={onSeedDemo}>
+          <Plus size={13} />
+          Load demo
+        </button>
+        <button className="toolbar-button" type="button" onClick={onClearHighlights}>
+          <X size={13} />
+          Clear
+        </button>
+      </div>
 
-        <div className="trace-actions">
-          {traceUrl ? (
-            <a href={traceUrl} title="Open latest Weave trace">
-              <ExternalLink size={15} />
-              View trace in Weave
-            </a>
-          ) : (
-            <span><Activity size={15} /> Trace appears after ingest or match</span>
-          )}
-        </div>
-      </header>
-    </>
+      <div className="trace-actions">
+        {traceUrl ? (
+          <a href={traceUrl} title="Open latest Weave trace">
+            <Activity size={13} />
+            View trace in Weave
+            <ExternalLink size={11} />
+          </a>
+        ) : (
+          <span><Activity size={13} /> Trace appears after ingest or match</span>
+        )}
+      </div>
+    </header>
   );
 }

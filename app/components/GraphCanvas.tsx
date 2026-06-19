@@ -9,11 +9,11 @@ import { graphNodeTypes } from "./GraphNodes";
 const fitViewOptions = { padding: 0.16, minZoom: 0.52, maxZoom: 1.5 };
 
 const legendItems = [
-  { label: "Company", color: "#007aff" },
-  { label: "Topic", color: "#34a853" },
-  { label: "Role", color: "#f9ab00" },
-  { label: "Place", color: "#a142f4" },
-  { label: "Source", color: "#ff6d01" },
+  { label: "Company", color: "#10b981" },
+  { label: "Topic", color: "#6366f1" },
+  { label: "Role", color: "#8b5cf6" },
+  { label: "Place", color: "#f59e0b" },
+  { label: "Source", color: "#0ea5e9" },
 ];
 
 function lodLevel(zoom: number): GraphLod {
@@ -141,7 +141,7 @@ export function GraphCanvas({
             else onClearSelection();
           }}
         >
-          <Background color="#d8dde5" gap={32} />
+          <Background color="#e5e7eb" gap={32} />
           <Controls showInteractive={false} />
         </ReactFlow>
       </div>

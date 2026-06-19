@@ -1,29 +1,39 @@
 :root {
-  --ink: #1b2430;
-  --ink-soft: #38444f;
-  --muted: #6b7785;
-  --line: #e6ecf2;
-  --line-soft: #eef2f7;
+  --ink: #111827;
+  --ink-soft: #374151;
+  --muted: #6b7280;
+  --faint: #9ca3af;
+  --line: #e5e7eb;
+  --line-soft: #f3f4f6;
+  --line-hover: #d1d5db;
   --panel: #ffffff;
+
+  /* Emerald brand accent */
+  --accent: #059669;
+  --accent-hover: #047857;
+  --accent-ring: #10b981;
+  --accent-soft: #ecfdf5;
+  --accent-line: #a7f3d0;
+  --accent-ink: #065f46;
 
   --blue: #4f7fd6;
   --blue-deep: #2f5fb5;
   --purple: #8b6fd6;
-  --green: #4ba373;
+  --green: #059669;
   --amber: #e0ad33;
   --amber-deep: #b9871a;
 
   /* layered soft shadows */
-  --sh-1: 0 1px 2px rgba(22, 33, 48, 0.04), 0 1px 1px rgba(22, 33, 48, 0.03);
-  --sh-2: 0 1px 2px rgba(22, 33, 48, 0.05), 0 6px 18px rgba(22, 33, 48, 0.07);
-  --sh-3: 0 2px 6px rgba(22, 33, 48, 0.06), 0 18px 44px rgba(22, 33, 48, 0.12);
+  --sh-1: 0 1px 2px rgba(17, 24, 39, 0.04), 0 1px 1px rgba(17, 24, 39, 0.03);
+  --sh-2: 0 1px 3px rgba(17, 24, 39, 0.06), 0 6px 16px rgba(17, 24, 39, 0.06);
+  --sh-3: 0 1px 3px rgba(17, 24, 39, 0.06), 0 10px 30px rgba(17, 24, 39, 0.08);
 
-  --r-sm: 9px;
-  --r-md: 12px;
-  --r-lg: 16px;
+  --r-sm: 7px;
+  --r-md: 10px;
+  --r-lg: 12px;
 
-  /* Sidebar width when the Copilot panel is open; the graph itself stays full width. */
-  --cs-w: 416px;
+  /* AI sidebar width when the Copilot panel is open; the graph itself stays full width. */
+  --cs-w: 376px;
 }
 
 * {
@@ -37,7 +47,7 @@ body {
 }
 
 body {
-  background: #f5f5f7;
+  background: #f9fafb;
   color: var(--ink);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -115,80 +125,107 @@ button:has(img[alt="Inspector logo"]) {
 
 .copilotKitSidebarContentWrapper,
 .copilotKitWindow {
-  --copilot-kit-primary-color: #4565cf;
+  --copilot-kit-primary-color: #059669;
   --copilot-kit-contrast-color: #ffffff;
   --copilot-kit-background-color: #ffffff;
-  --copilot-kit-secondary-color: #f1f5f9;
-  --copilot-kit-secondary-contrast-color: #1b2430;
-  --copilot-kit-separator-color: #e6ecf2;
-  --copilot-kit-muted-color: #6b7785;
+  --copilot-kit-secondary-color: #f9fafb;
+  --copilot-kit-secondary-contrast-color: #111827;
+  --copilot-kit-separator-color: #e5e7eb;
+  --copilot-kit-muted-color: #6b7280;
 }
 
 /* ─── Top toolbar ────────────────────────────────────────────── */
 
 .graph-upload-toolbar {
   align-items: center;
-  background: rgba(255, 255, 255, 0.78);
-  backdrop-filter: saturate(1.4) blur(12px);
+  background: #ffffff;
   border-bottom: 1px solid var(--line);
-  box-shadow: var(--sh-1);
+  box-shadow: none;
   display: grid;
-  gap: 14px;
-  grid-template-columns: minmax(230px, 1fr) auto minmax(190px, auto);
-  min-height: 76px;
-  padding: 13px 18px;
+  gap: 12px;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  min-height: 52px;
+  padding: 0 16px;
+  z-index: 20;
 }
 
 .toolbar-brand {
   align-items: center;
   display: flex;
-  gap: 11px;
+  gap: 10px;
   min-width: 0;
+  overflow: hidden;
 }
 
 .brand-logo {
   align-items: center;
   background: transparent;
   border: 0;
-  border-radius: 11px;
-  box-shadow: 0 10px 22px rgba(2, 8, 23, 0.26);
+  border-radius: 7px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
   display: inline-flex;
-  flex: 0 0 44px;
-  height: 44px;
+  flex: 0 0 28px;
+  height: 28px;
   justify-content: center;
-  min-width: 44px;
+  min-width: 28px;
   overflow: hidden;
   padding: 0;
-  width: 44px;
+  width: 28px;
 }
 
 .brand-logo img {
-  border-radius: 11px;
+  border-radius: 7px;
   display: block;
   height: 100%;
   object-fit: cover;
   width: 100%;
 }
 
-.toolbar-brand h1 {
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 1.1;
+.brand-name {
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
   white-space: nowrap;
 }
 
-.toolbar-brand p,
+.brand-divider {
+  background: var(--line);
+  flex: 0 0 auto;
+  height: 16px;
+  width: 1px;
+}
+
+.toolbar-status {
+  align-items: center;
+  color: var(--faint);
+  display: inline-flex;
+  font-size: 11.5px;
+  gap: 5px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status-dot {
+  background: var(--accent-ring);
+  border-radius: 50%;
+  flex-shrink: 0;
+  height: 6px;
+  width: 6px;
+}
+
 .trace-actions span {
-  color: var(--muted);
+  color: var(--faint);
   font-size: 12px;
 }
 
 .upload-cluster {
   align-items: center;
   display: flex;
-  flex-wrap: wrap;
-  gap: 9px;
+  flex-wrap: nowrap;
+  gap: 6px;
   justify-content: center;
 }
 
@@ -198,13 +235,13 @@ button:has(img[alt="Inspector logo"]) {
 .trace-actions span {
   align-items: center;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 7px;
   display: inline-flex;
   font-size: 12.5px;
-  font-weight: 600;
-  gap: 7px;
-  min-height: 38px;
-  padding: 0 13px;
+  font-weight: 500;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 11px;
   text-decoration: none;
   white-space: nowrap;
 }
@@ -212,17 +249,18 @@ button:has(img[alt="Inspector logo"]) {
 .upload-button,
 .toolbar-button {
   background: #ffffff;
-  box-shadow: var(--sh-1);
+  box-shadow: none;
   color: var(--ink-soft);
   cursor: pointer;
-  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+  transition: background 0.12s ease, border-color 0.12s ease;
 }
 
 .upload-button:hover,
 .toolbar-button:hover:not(:disabled) {
-  border-color: #cdd9e6;
-  box-shadow: var(--sh-2);
-  transform: translateY(-1px);
+  background: #f9fafb;
+  border-color: var(--line-hover);
+  box-shadow: none;
+  transform: none;
 }
 
 .upload-button input {
@@ -230,26 +268,28 @@ button:has(img[alt="Inspector logo"]) {
 }
 
 .primary-action {
-  background: #eaf3ff;
-  border: 1px solid #bcd7ff;
-  box-shadow: 0 1px 2px rgba(37, 99, 235, 0.08);
-  color: #245cb8;
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  box-shadow: 0 1px 2px rgba(5, 150, 105, 0.18);
+  color: #ffffff;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .primary-action:hover:not(:disabled) {
-  background: #dcecff;
-  border-color: #a7c9fb;
-  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.12);
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  box-shadow: 0 1px 2px rgba(5, 150, 105, 0.22);
 }
 
 .updated-action {
-  border-color: #b9dfdb;
-  color: #17645f;
+  border-color: var(--accent-line);
+  color: var(--accent-hover);
 }
 
 .updated-action:hover:not(:disabled) {
-  border-color: #8ecac5;
-  box-shadow: 0 8px 18px rgba(23, 100, 95, 0.18);
+  border-color: var(--accent-ring);
+  box-shadow: none;
 }
 
 .toolbar-button:disabled {
@@ -271,16 +311,19 @@ button:has(img[alt="Inspector logo"]) {
 
 .trace-actions a {
   background: #ffffff;
-  border-color: #cfe0f5;
-  box-shadow: var(--sh-1);
-  color: var(--blue-deep);
-  max-width: 100%;
+  border-color: var(--line);
+  box-shadow: none;
+  color: var(--muted);
+  font-weight: 500;
+  max-width: 220px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .trace-actions a:hover {
-  box-shadow: var(--sh-2);
+  background: #f9fafb;
+  border-color: var(--line-hover);
+  box-shadow: none;
 }
 
 /* ─── Upload review chips ────────────────────────────────────── */
@@ -356,7 +399,7 @@ button:has(img[alt="Inspector logo"]) {
   flex: 1 1 0;
   min-height: 0;
   position: relative;
-  background: #f5f5f7;
+  background: #f9fafb;
 }
 
 .graph-stage .react-flow {
@@ -371,7 +414,7 @@ button:has(img[alt="Inspector logo"]) {
   display: grid;
   gap: 12px;
   justify-items: center;
-  min-height: calc(100vh - 78px);
+  min-height: calc(100vh - 52px);
   padding: 24px;
   text-align: center;
 }
@@ -443,12 +486,13 @@ button:has(img[alt="Inspector logo"]) {
 }
 
 .rg-tag-node.matched {
-  box-shadow: inset 0 0 0 2px #f9ab00;
+  border-color: var(--accent-ring);
+  box-shadow: inset 0 0 0 2px var(--accent-ring), 0 0 0 4px rgba(16, 185, 129, 0.16);
 }
 
 .rg-tag-node.selected {
-  border-color: #007aff;
-  box-shadow: inset 0 0 0 2px #007aff;
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 2px var(--accent);
   transform: none;
 }
 
@@ -558,8 +602,8 @@ button:has(img[alt="Inspector logo"]) {
 }
 
 .rg-person-node.selected {
-  border-color: #007aff;
-  box-shadow: inset 0 0 0 2px #007aff;
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 2px var(--accent);
 }
 
 .rg-person-node.updated {
@@ -697,8 +741,8 @@ button:has(img[alt="Inspector logo"]) {
 }
 
 .graph-legend i.legend-match {
-  background: #ffffff;
-  border: 3px solid #f9ab00;
+  background: var(--accent-soft);
+  border: 3px solid var(--accent-ring);
 }
 
 .legend-note {
@@ -730,7 +774,7 @@ button:has(img[alt="Inspector logo"]) {
   background: transparent;
   border: 0;
   border-radius: 7px;
-  color: #007aff;
+  color: var(--accent);
   cursor: pointer;
   display: inline-flex;
   font-size: 12px;
@@ -740,7 +784,7 @@ button:has(img[alt="Inspector logo"]) {
 }
 
 .graph-mode-bar button:hover {
-  background: #eef5ff;
+  background: var(--accent-soft);
 }
 
 .graph-mode-bar strong,
@@ -767,9 +811,8 @@ button:has(img[alt="Inspector logo"]) {
 /* ─── Explore panel (right dock over the graph) ──────────────── */
 
 .explore-panel {
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(14px) saturate(1.3);
-  border: 1px solid #e1e8f0;
+  background: #ffffff;
+  border: 1px solid var(--line);
   border-radius: var(--r-lg);
   bottom: 16px;
   box-shadow: var(--sh-3);
@@ -779,8 +822,14 @@ button:has(img[alt="Inspector logo"]) {
   position: absolute;
   right: 16px;
   top: 16px;
-  width: 322px;
+  width: 312px;
   z-index: 14;
+  animation: slideIn 0.18s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(8px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 .prm-one-page:has(.copilotKitWindow.open) .explore-panel {
@@ -820,7 +869,7 @@ button:has(img[alt="Inspector logo"]) {
 }
 
 .explore-title .spark {
-  color: var(--amber-deep);
+  color: #d97706;
 }
 
 .tag-dot {
@@ -840,27 +889,28 @@ button:has(img[alt="Inspector logo"]) {
 
 .explore-back {
   align-items: center;
-  background: transparent;
-  border: 0;
-  border-radius: 7px;
-  color: var(--blue-deep);
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--muted);
   cursor: pointer;
   display: inline-flex;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 500;
   gap: 5px;
-  padding: 5px 7px;
+  padding: 5px 9px;
 }
 
 .explore-back:hover {
-  background: #eef3fb;
+  background: #f9fafb;
+  border-color: var(--line-hover);
 }
 
 .explore-x {
   align-items: center;
-  background: #f4f7fa;
-  border: 0;
-  border-radius: 7px;
+  background: #f9fafb;
+  border: 1px solid var(--line);
+  border-radius: 6px;
   color: var(--muted);
   cursor: pointer;
   display: inline-flex;
@@ -870,7 +920,7 @@ button:has(img[alt="Inspector logo"]) {
 }
 
 .explore-x:hover {
-  background: #e9eef3;
+  background: var(--line-soft);
   color: var(--ink);
 }
 
@@ -921,9 +971,9 @@ button:has(img[alt="Inspector logo"]) {
 
 .person-avatar {
   align-items: center;
-  background: #007aff;
+  background: var(--accent-soft);
   border-radius: 999px;
-  color: #ffffff;
+  color: var(--accent-hover);
   display: inline-flex;
   flex-shrink: 0;
   font-size: 13px;
@@ -935,9 +985,11 @@ button:has(img[alt="Inspector logo"]) {
 }
 
 .person-avatar.lg {
+  border: 2px solid var(--accent-ring);
+  color: var(--accent);
   font-size: 18px;
-  height: 46px;
-  width: 46px;
+  height: 48px;
+  width: 48px;
 }
 
 .person-avatar.updated {
@@ -1093,15 +1145,15 @@ button:has(img[alt="Inspector logo"]) {
 }
 
 .chip.company {
-  background: #f0ebfb;
-  border: 1px solid #cdbcf2;
-  color: #41307a;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-line);
+  color: var(--accent-hover);
 }
 
 .chip.topic {
-  background: #eaf6ef;
-  border: 1px solid #aedcc1;
-  color: #225739;
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  color: #4338ca;
 }
 
 /* match drafts inside the panel */
@@ -1128,16 +1180,16 @@ button:has(img[alt="Inspector logo"]) {
 
 .draft-rank {
   align-items: center;
-  background: #fff4df;
-  border: 1px solid #f5ce72;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
   border-radius: 999px;
-  color: #70470c;
+  color: #92400e;
   display: inline-flex;
   font-size: 11px;
-  font-weight: 800;
-  height: 22px;
+  font-weight: 700;
+  height: 20px;
   justify-content: center;
-  width: 22px;
+  width: 20px;
 }
 
 .draft-name {
@@ -1152,7 +1204,7 @@ button:has(img[alt="Inspector logo"]) {
 }
 
 .draft-name:hover {
-  color: var(--blue-deep);
+  color: var(--accent);
   text-decoration: underline;
 }
 
@@ -1163,16 +1215,16 @@ button:has(img[alt="Inspector logo"]) {
 }
 
 .draft-message {
-  background: #f5f8fc;
+  background: #f9fafb;
   border: 1px solid var(--line);
-  border-radius: 9px;
+  border-radius: 7px;
   color: var(--ink-soft);
   display: block;
   font-size: 12px;
-  font-style: normal;
-  line-height: 1.45;
+  font-style: italic;
+  line-height: 1.55;
   margin-top: 8px;
-  padding: 9px;
+  padding: 9px 10px;
 }
 
 .draft-actions {
@@ -1203,28 +1255,28 @@ button:has(img[alt="Inspector logo"]) {
 }
 
 .draft-approve {
-  background: #007aff;
+  background: var(--accent);
   border: 0;
-  border-radius: 8px;
+  border-radius: 6px;
   box-shadow: none;
   color: #ffffff;
   cursor: pointer;
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 11.5px;
+  font-weight: 600;
   padding: 6px 13px;
 }
 
 .draft-approve:hover {
-  background: #0067d6;
+  background: var(--accent-hover);
   box-shadow: none;
 }
 
 .draft-approved {
   align-items: center;
-  color: var(--green);
+  color: var(--accent);
   display: inline-flex;
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 600;
   gap: 4px;
 }
 
@@ -1274,36 +1326,38 @@ button:has(img[alt="Inspector logo"]) {
 .app-nav {
   align-items: center;
   display: inline-flex;
-  gap: 6px;
-  margin-left: 14px;
-  padding-left: 14px;
-  border-left: 1px solid var(--line);
+  gap: 2px;
+  margin-left: 0;
+  padding-left: 0;
+  border-left: 0;
 }
 
 .nav-link {
   align-items: center;
   border: 1px solid transparent;
-  border-radius: 8px;
+  border-radius: 6px;
   color: var(--muted);
   cursor: pointer;
   display: inline-flex;
-  font-size: 12.5px;
-  font-weight: 600;
-  gap: 6px;
-  padding: 6px 11px;
+  font-size: 12px;
+  font-weight: 500;
+  gap: 5px;
+  height: 28px;
+  padding: 0 10px;
   text-decoration: none;
 }
 
 .nav-link:hover {
-  background: #f1f5f9;
+  background: var(--line-soft);
   color: var(--ink);
 }
 
 .nav-link.active {
-  background: linear-gradient(150deg, #5b86df, #4565cf);
+  background: #111827;
   border-color: transparent;
-  box-shadow: 0 4px 12px rgba(69, 101, 207, 0.28);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
   color: #ffffff;
+  font-weight: 600;
 }
 
 /* ─── Monitor page ───────────────────────────────────────────── */
@@ -1330,6 +1384,19 @@ button:has(img[alt="Inspector logo"]) {
 
 .monitor-topbar .toolbar-brand > span {
   background: linear-gradient(150deg, #6a5ad6 0%, #4565cf 100%);
+}
+
+.monitor-topbar .toolbar-brand h1 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.monitor-topbar .toolbar-brand p {
+  color: var(--muted);
+  font-size: 12px;
 }
 
 .mon-grid {

@@ -14,11 +14,11 @@ import type { GraphLod, Person, PRMNode, Tag, TagKind } from "./types";
 import { isUpdatedContactPerson } from "./realScreenshots";
 
 const TAG_THEME: Record<TagKind, { accent: string; label: string; priority: number; tint: string }> = {
-  company: { accent: "#007aff", label: "Company", priority: 2, tint: "#eef6ff" },
-  topic: { accent: "#34a853", label: "Topic", priority: 1, tint: "#eef8f1" },
-  role: { accent: "#f9ab00", label: "Role", priority: 3, tint: "#fff7e3" },
-  location: { accent: "#a142f4", label: "Place", priority: 4, tint: "#f6edff" },
-  source: { accent: "#ff6d01", label: "Source", priority: 5, tint: "#fff2e8" },
+  company: { accent: "#10b981", label: "Company", priority: 2, tint: "#ecfdf5" },
+  topic: { accent: "#6366f1", label: "Topic", priority: 1, tint: "#eef2ff" },
+  role: { accent: "#8b5cf6", label: "Role", priority: 3, tint: "#f5f3ff" },
+  location: { accent: "#f59e0b", label: "Place", priority: 4, tint: "#fffbeb" },
+  source: { accent: "#0ea5e9", label: "Source", priority: 5, tint: "#f0f9ff" },
 };
 
 const SOURCE_LABELS: Record<string, string> = {
