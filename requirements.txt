@@ -1,0 +1,10 @@
+weave
+wandb
+redis
+fakeredis
+python-dotenv
+fastapi
+uvicorn
+langgraph
+openai
+numpy

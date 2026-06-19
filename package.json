@@ -1,0 +1,29 @@
+{
+  "name": "weavehacks-mission-control",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@copilotkit/react-core": "1.59.5",
+    "@copilotkit/react-ui": "^1.59.5",
+    "@copilotkit/runtime": "1.59.5",
+    "@xyflow/react": "latest",
+    "d3-force": "^3.0.0",
+    "lucide-react": "1.17.0",
+    "next": "16.2.7",
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
+  },
+  "devDependencies": {
+    "@types/d3-force": "^3.0.10",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "typescript": "latest"
+  }
+}
