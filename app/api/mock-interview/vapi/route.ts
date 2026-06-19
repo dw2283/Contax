@@ -6,12 +6,12 @@ const VAPI_BASE_URL = "https://api.vapi.ai";
 const POLL_ATTEMPTS = 4;
 const POLL_DELAY_MS = 2500;
 
-type VapiMode = "chat" | "eval";
+type VapiMode = "chat" | "eval" | "voice";
 
 type VapiValidationResult = {
   provider: "vapi";
   mode: VapiMode;
-  status: "completed" | "queued" | "billing_required" | "error";
+  status: "completed" | "queued" | "billing_required" | "error" | "ready";
   summary: string;
   detail?: string;
   assistant_reply?: string | null;
@@ -32,6 +32,10 @@ function buildAssistantPayload(brief: MockInterviewBriefResponse) {
     name: `Contax · ${brief.contact.name}`,
     firstMessage: brief.assistant.first_message,
     firstMessageMode: "assistant-waits-for-user",
+    voice: {
+      provider: "vapi",
+      voiceId: "Elliot",
+    },
     model: {
       provider: "openai",
       model: "gpt-4.1",
@@ -156,6 +160,22 @@ async function upsertAssistant(brief: MockInterviewBriefResponse): Promise<
   return {
     id: assistantId,
     name: typeof assistantName === "string" ? assistantName : payload.name,
+  };
+}
+
+async function prepareVoiceSession(brief: MockInterviewBriefResponse): Promise<VapiValidationResult> {
+  const assistant = await upsertAssistant(brief);
+  if ("error" in assistant) {
+    return assistant.error;
+  }
+
+  return {
+    provider: "vapi",
+    mode: "voice",
+    status: "ready",
+    summary: "Vapi voice assistant is ready.",
+    assistant_id: assistant.id,
+    assistant_name: assistant.name,
   };
 }
 
@@ -425,7 +445,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ detail: "VAPI_API_KEY is not configured on the server." }, { status: 500 });
   }
 
-  const mode = body.mode === "eval" ? "eval" : "chat";
-  const result = mode === "eval" ? await runEvalValidation(body.brief) : await runChatValidation(body.brief);
+  const mode = body.mode === "eval" ? "eval" : body.mode === "voice" ? "voice" : "chat";
+  const result =
+    mode === "eval"
+      ? await runEvalValidation(body.brief)
+      : mode === "voice"
+        ? await prepareVoiceSession(body.brief)
+        : await runChatValidation(body.brief);
   return NextResponse.json(result);
 }

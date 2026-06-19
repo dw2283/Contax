@@ -12,6 +12,7 @@
     "@copilotkit/react-core": "1.59.5",
     "@copilotkit/react-ui": "^1.59.5",
     "@copilotkit/runtime": "1.59.5",
+    "@vapi-ai/web": "^2.5.2",
     "@xyflow/react": "latest",
     "d3-force": "^3.0.0",
     "lucide-react": "1.17.0",

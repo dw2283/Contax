@@ -31,11 +31,16 @@ function redisModeBody(): { redis_mode?: string } {
 }
 
 async function parseError(response: Response): Promise<string> {
+  const text = await response.text();
+  if (!text) return response.statusText || `HTTP ${response.status}`;
+
   try {
-    const body = await response.json();
-    return body.detail ?? JSON.stringify(body);
+    const body = JSON.parse(text) as { detail?: unknown };
+    if (typeof body?.detail === "string") return body.detail;
+    if (Array.isArray(body?.detail)) return body.detail.join(", ");
+    return JSON.stringify(body);
   } catch {
-    return response.text();
+    return text;
   }
 }
 

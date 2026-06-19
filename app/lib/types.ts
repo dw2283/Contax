@@ -227,12 +227,12 @@ export type MockInterviewBriefResponse = {
   validation_plan: string[];
 };
 
-export type MockInterviewVapiMode = "chat" | "eval";
+export type MockInterviewVapiMode = "chat" | "eval" | "voice";
 
 export type MockInterviewVapiResponse = {
   provider: "vapi";
   mode: MockInterviewVapiMode;
-  status: "completed" | "queued" | "billing_required" | "error";
+  status: "completed" | "queued" | "billing_required" | "error" | "ready";
   summary: string;
   detail?: string;
   assistant_reply?: string | null;
