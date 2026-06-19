@@ -1,3 +1,22 @@
+/*
+ * Contax AI — globals-redesigned.css
+ * Design refresh: Vercel-Dashboard minimal, Emerald accent, light mode only.
+ *
+ * Drop-in replacement for app/globals.css.
+ * All class names are unchanged — no React component edits needed.
+ *
+ * Key changes vs. original:
+ *  • Primary accent: blue → emerald (#059669 / #10b981)
+ *  • Toolbar: 76px → 52px, no backdrop-filter, solid white
+ *  • Primary button: solid green (was soft-blue outline)
+ *  • Nav active: dark #111827 pill (was blue gradient)
+ *  • Tag nodes: white fill + colored 1.5px border (cleaner)
+ *  • Panels: solid white, 1px border, no blur
+ *  • Copilot sidebar: themed to emerald
+ *  • Shadows: subtler, consistent
+ *  • Border-radius: tighter (7 / 10 / 12px)
+ */
+
 :root {
   --ink: #111827;
   --ink-soft: #374151;
@@ -8,32 +27,31 @@
   --line-hover: #d1d5db;
   --panel: #ffffff;
 
-  /* Emerald brand accent */
-  --accent: #059669;
-  --accent-hover: #047857;
-  --accent-ring: #10b981;
-  --accent-soft: #ecfdf5;
-  --accent-line: #a7f3d0;
-  --accent-ink: #065f46;
+  /* Primary: Emerald (replaces blue) */
+  --blue: #10b981;
+  --blue-deep: #059669;
+  --blue-darker: #047857;
 
-  --blue: #4f7fd6;
-  --blue-deep: #2f5fb5;
-  --purple: #8b6fd6;
-  --green: #059669;
-  --amber: #e0ad33;
-  --amber-deep: #b9871a;
+  /* Semantic aliases kept for backwards compat */
+  --green: #10b981;
+  --green-deep: #059669;
+  --green-light: #ecfdf5;
+  --green-ring: #a7f3d0;
 
-  /* layered soft shadows */
-  --sh-1: 0 1px 2px rgba(17, 24, 39, 0.04), 0 1px 1px rgba(17, 24, 39, 0.03);
-  --sh-2: 0 1px 3px rgba(17, 24, 39, 0.06), 0 6px 16px rgba(17, 24, 39, 0.06);
-  --sh-3: 0 1px 3px rgba(17, 24, 39, 0.06), 0 10px 30px rgba(17, 24, 39, 0.08);
+  --purple: #8b5cf6;
+  --amber: #f59e0b;
+  --amber-deep: #d97706;
+
+  /* Shadows — cleaner, less layered */
+  --sh-1: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --sh-2: 0 1px 3px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.07);
+  --sh-3: 0 1px 3px rgba(0, 0, 0, 0.06), 0 16px 40px rgba(0, 0, 0, 0.10);
 
   --r-sm: 7px;
   --r-md: 10px;
   --r-lg: 12px;
 
-  /* AI sidebar width when the Copilot panel is open; the graph itself stays full width. */
-  --cs-w: 376px;
+  --cs-w: 416px;
 }
 
 * {
@@ -103,11 +121,11 @@ button:has(img[alt="Inspector logo"]) {
   width: calc(100vw - var(--cs-w));
 }
 
-/* ─── CopilotSidebar theming + fixed width ───────────────────── */
+/* ─── CopilotSidebar theming ─────────────────────────────────── */
 
 .copilotKitWindow {
   border-left: 1px solid var(--line) !important;
-  box-shadow: -8px 0 30px rgba(22, 33, 48, 0.06) !important;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.04) !important;
   max-width: var(--cs-w) !important;
   width: var(--cs-w) !important;
 }
@@ -123,6 +141,7 @@ button:has(img[alt="Inspector logo"]) {
   width: 0 !important;
 }
 
+/* Emerald-themed Copilot sidebar */
 .copilotKitSidebarContentWrapper,
 .copilotKitWindow {
   --copilot-kit-primary-color: #059669;
@@ -138,12 +157,14 @@ button:has(img[alt="Inspector logo"]) {
 
 .graph-upload-toolbar {
   align-items: center;
+  /* Solid white — no blur */
   background: #ffffff;
   border-bottom: 1px solid var(--line);
   box-shadow: none;
   display: grid;
   gap: 12px;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  /* 52px: slimmer, more focused */
   min-height: 52px;
   padding: 0 16px;
   z-index: 20;
@@ -162,6 +183,7 @@ button:has(img[alt="Inspector logo"]) {
   background: transparent;
   border: 0;
   border-radius: 7px;
+  /* Lighter shadow */
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
   display: inline-flex;
   flex: 0 0 28px;
@@ -181,11 +203,14 @@ button:has(img[alt="Inspector logo"]) {
   width: 100%;
 }
 
-.brand-name {
+.brand-name,
+.toolbar-brand h1 {
+  /* Tighter, more purposeful */
   color: var(--ink);
   font-size: 14px;
   font-weight: 600;
   letter-spacing: -0.02em;
+  line-height: 1.2;
   white-space: nowrap;
 }
 
@@ -209,16 +234,17 @@ button:has(img[alt="Inspector logo"]) {
 }
 
 .status-dot {
-  background: var(--accent-ring);
+  background: var(--blue);
   border-radius: 50%;
   flex-shrink: 0;
   height: 6px;
   width: 6px;
 }
 
+.toolbar-brand p,
 .trace-actions span {
-  color: var(--faint);
-  font-size: 12px;
+  color: var(--muted);
+  font-size: 11.5px;
 }
 
 .upload-cluster {
@@ -229,13 +255,14 @@ button:has(img[alt="Inspector logo"]) {
   justify-content: center;
 }
 
+/* Base button shell */
 .upload-button,
 .toolbar-button,
 .trace-actions a,
 .trace-actions span {
   align-items: center;
   border: 1px solid var(--line);
-  border-radius: 7px;
+  border-radius: var(--r-sm);
   display: inline-flex;
   font-size: 12.5px;
   font-weight: 500;
@@ -252,13 +279,13 @@ button:has(img[alt="Inspector logo"]) {
   box-shadow: none;
   color: var(--ink-soft);
   cursor: pointer;
-  transition: background 0.12s ease, border-color 0.12s ease;
+  transition: background 0.1s ease, border-color 0.1s ease;
 }
 
 .upload-button:hover,
 .toolbar-button:hover:not(:disabled) {
   background: #f9fafb;
-  border-color: var(--line-hover);
+  border-color: #d1d5db;
   box-shadow: none;
   transform: none;
 }
@@ -267,39 +294,42 @@ button:has(img[alt="Inspector logo"]) {
   display: none;
 }
 
+/* ── Primary action: solid emerald ── */
 .primary-action {
-  background: var(--accent);
-  border: 1px solid var(--accent);
-  box-shadow: 0 1px 2px rgba(5, 150, 105, 0.18);
+  background: #059669;
+  border: none;
+  box-shadow: none;
   color: #ffffff;
   font-weight: 600;
-  letter-spacing: -0.01em;
 }
 
 .primary-action:hover:not(:disabled) {
-  background: var(--accent-hover);
-  border-color: var(--accent-hover);
-  box-shadow: 0 1px 2px rgba(5, 150, 105, 0.22);
+  background: #047857;
+  border-color: transparent;
+  box-shadow: none;
+  transform: none;
 }
 
+/* Updated (teal outline) */
 .updated-action {
-  border-color: var(--accent-line);
-  color: var(--accent-hover);
+  border-color: #a7f3d0;
+  color: #047857;
 }
 
 .updated-action:hover:not(:disabled) {
-  border-color: var(--accent-ring);
+  background: #ecfdf5;
+  border-color: #6ee7b7;
   box-shadow: none;
 }
 
 .toolbar-button:disabled {
   cursor: not-allowed;
-  opacity: 0.55;
+  opacity: 0.45;
 }
 
 .upload-button.disabled {
   cursor: not-allowed;
-  opacity: 0.65;
+  opacity: 0.55;
   transform: none;
 }
 
@@ -314,15 +344,15 @@ button:has(img[alt="Inspector logo"]) {
   border-color: var(--line);
   box-shadow: none;
   color: var(--muted);
-  font-weight: 500;
   max-width: 220px;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: background 0.1s ease, border-color 0.1s ease;
 }
 
 .trace-actions a:hover {
   background: #f9fafb;
-  border-color: var(--line-hover);
+  border-color: #d1d5db;
   box-shadow: none;
 }
 
@@ -330,27 +360,27 @@ button:has(img[alt="Inspector logo"]) {
 
 .upload-review-bar {
   align-items: center;
-  background: rgba(247, 250, 253, 0.7);
+  background: #f9fafb;
   border-bottom: 1px solid var(--line);
   display: flex;
-  gap: 9px;
-  min-height: 52px;
+  gap: 8px;
+  min-height: 48px;
   overflow-x: auto;
-  padding: 10px 18px;
+  padding: 8px 18px;
 }
 
 .upload-chip {
   align-items: center;
   background: #ffffff;
   border: 1px solid var(--line);
-  border-radius: 10px;
-  box-shadow: var(--sh-1);
+  border-radius: var(--r-sm);
+  box-shadow: none;
   display: inline-grid;
   gap: 8px;
   grid-template-columns: minmax(120px, 1fr) 104px 24px;
-  min-height: 36px;
-  min-width: 296px;
-  padding: 5px 7px 5px 11px;
+  min-height: 34px;
+  min-width: 290px;
+  padding: 4px 7px 4px 10px;
 }
 
 .upload-chip strong {
@@ -361,10 +391,10 @@ button:has(img[alt="Inspector logo"]) {
 }
 
 .upload-chip select {
-  background: #f7f9fc;
-  border: 1px solid #d8e1eb;
-  border-radius: 7px;
-  min-height: 28px;
+  background: #f9fafb;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  min-height: 26px;
   padding: 2px 6px;
 }
 
@@ -372,7 +402,7 @@ button:has(img[alt="Inspector logo"]) {
   align-items: center;
   background: transparent;
   border: 0;
-  border-radius: 6px;
+  border-radius: 5px;
   color: var(--muted);
   cursor: pointer;
   display: inline-flex;
@@ -380,17 +410,17 @@ button:has(img[alt="Inspector logo"]) {
 }
 
 .upload-chip button:hover {
-  background: #f1f4f8;
+  background: #f3f4f6;
   color: var(--ink);
 }
 
 .graph-error {
-  background: linear-gradient(180deg, #fff2f4, #ffeaee);
-  border-bottom: 1px solid #ffd2d9;
-  color: #9b1c31;
+  background: #fff2f4;
+  border-bottom: 1px solid #fecdd3;
+  color: #9f1239;
   font-size: 12.5px;
   margin: 0;
-  padding: 10px 18px;
+  padding: 9px 18px;
 }
 
 /* ─── Graph stage ────────────────────────────────────────────── */
@@ -412,23 +442,23 @@ button:has(img[alt="Inspector logo"]) {
   align-items: center;
   color: var(--muted);
   display: grid;
-  gap: 12px;
+  gap: 10px;
   justify-items: center;
-  min-height: calc(100vh - 52px);
+  min-height: calc(100vh - 54px);
   padding: 24px;
   text-align: center;
 }
 
 .empty-graph svg {
-  color: #b7c4d3;
+  color: #d1d5db;
 }
 
 .empty-graph p {
   font-size: 13px;
-  max-width: 340px;
+  max-width: 320px;
 }
 
-/* ─── Tag bubbles (force graph) ──────────────────────────────── */
+/* ─── Tag bubbles ────────────────────────────────────────────── */
 
 .react-flow__node-tag {
   background: transparent;
@@ -439,11 +469,12 @@ button:has(img[alt="Inspector logo"]) {
 
 .rg-tag-node {
   align-items: center;
-  background: var(--tag-tint);
-  border: 1px solid #d2d2d7;
+  /* White fill — cleaner than tinted bg */
+  background: #ffffff;
+  border: 1.5px solid #e5e7eb;
   border-radius: 50%;
   box-shadow: none;
-  color: #1d1d1f;
+  color: #111827;
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -451,58 +482,43 @@ button:has(img[alt="Inspector logo"]) {
   padding: 9px;
   position: relative;
   text-align: center;
-  transition: transform 0.14s ease, box-shadow 0.14s ease, filter 0.14s ease;
+  transition: transform 0.12s ease, border-color 0.12s ease;
 }
 
-.rg-tag-node.company {
-  border-color: #d2d2d7;
-}
-
-.rg-tag-node.topic {
-  border-color: #d2d2d7;
-}
-
-.rg-tag-node.role {
-  border-color: #d2d2d7;
-}
-
-.rg-tag-node.location {
-  border-color: #d2d2d7;
-}
-
-.rg-tag-node.source {
-  border-color: #d2d2d7;
+/* Per-kind colored borders via CSS custom property */
+.rg-tag-node {
+  border-color: color-mix(in srgb, var(--tag-accent) 60%, #e5e7eb);
+  background: color-mix(in srgb, var(--tag-tint) 40%, #ffffff);
 }
 
 .rg-tag-node:hover {
-  border-color: color-mix(in srgb, var(--tag-accent), #ffffff 36%);
-  filter: none;
+  border-color: var(--tag-accent);
   transform: translateY(-1px);
 }
 
 .rg-tag-node.updated {
-  border-color: #d2d2d7;
-  box-shadow: none;
+  border-color: var(--tag-accent);
 }
 
 .rg-tag-node.matched {
-  border-color: var(--accent-ring);
-  box-shadow: inset 0 0 0 2px var(--accent-ring), 0 0 0 4px rgba(16, 185, 129, 0.16);
+  /* Gold ring for matched tags */
+  box-shadow: 0 0 0 2px #f9ab00;
+  border-color: #f9ab00;
 }
 
 .rg-tag-node.selected {
-  border-color: var(--accent);
-  box-shadow: inset 0 0 0 2px var(--accent);
+  border-color: #059669;
+  box-shadow: 0 0 0 2px #059669;
   transform: none;
 }
 
 .tag-label {
-  color: #1d1d1f;
+  color: #111827;
   display: -webkit-box;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0;
-  line-height: 1.08;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
   overflow: hidden;
   overflow-wrap: anywhere;
   text-shadow: none;
@@ -514,47 +530,48 @@ button:has(img[alt="Inspector logo"]) {
 .tag-kind-dot {
   background: var(--tag-accent);
   border-radius: 50%;
-  height: 7px;
-  margin-bottom: 4px;
-  width: 7px;
+  height: 6px;
+  margin-bottom: 3px;
+  width: 6px;
 }
 
 .tag-count {
-  background: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(0,0,0,0.06);
   border-radius: 999px;
-  color: #1d1d1f;
-  font-size: 10.5px;
-  font-weight: 800;
+  color: #374151;
+  font-size: 10px;
+  font-weight: 700;
   line-height: 1;
-  margin-top: 4px;
-  padding: 3px 7px;
+  margin-top: 3px;
+  padding: 2px 6px;
 }
 
 .tag-updated-dot {
-  background: #0d9488;
+  background: #059669;
   border: 2px solid #ffffff;
   border-radius: 999px;
-  height: 12px;
+  height: 10px;
   position: absolute;
-  right: 7px;
-  top: 7px;
-  width: 12px;
+  right: 6px;
+  top: 6px;
+  width: 10px;
 }
 
 .updated-node-badge {
-  background: #0f766e;
-  border: 1px solid #99f6e4;
+  background: #059669;
+  border: 1px solid #a7f3d0;
   border-radius: 999px;
-  box-shadow: 0 5px 14px rgba(15, 118, 110, 0.34);
+  box-shadow: 0 3px 10px rgba(5, 150, 105, 0.28);
   color: #ffffff;
   font-size: 9px;
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1;
-  padding: 4px 7px;
+  padding: 3px 6px;
   position: absolute;
-  right: -20px;
+  right: -18px;
   text-transform: uppercase;
-  top: -12px;
+  top: -11px;
   white-space: nowrap;
 }
 
@@ -571,6 +588,8 @@ button:has(img[alt="Inspector logo"]) {
   width: 1px !important;
 }
 
+/* ─── Person nodes ───────────────────────────────────────────── */
+
 .react-flow__node-person {
   background: transparent;
   border: 0;
@@ -581,104 +600,110 @@ button:has(img[alt="Inspector logo"]) {
 .rg-person-node {
   align-items: center;
   background: #ffffff;
-  border: 1px solid #d2d2d7;
+  border: 1.5px solid #e5e7eb;
   border-radius: 50%;
   box-shadow: none;
-  color: #1d1d1f;
+  color: #111827;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 6px;
+  padding: 5px;
   position: relative;
   text-align: center;
-  transition: background 0.14s ease, border-color 0.14s ease, transform 0.14s ease;
+  transition: border-color 0.12s ease, transform 0.12s ease;
 }
 
 .rg-person-node:hover {
-  background: #f8fafc;
-  border-color: #aeb4bd;
+  background: #f9fafb;
+  border-color: #d1d5db;
   transform: translateY(-1px);
 }
 
 .rg-person-node.selected {
-  border-color: var(--accent);
-  box-shadow: inset 0 0 0 2px var(--accent);
+  border-color: #059669;
+  box-shadow: 0 0 0 2px #059669;
 }
 
 .rg-person-node.updated {
-  border-color: #0d9488;
+  background: #ecfdf5;
+  border-color: #10b981;
 }
 
 .rg-person-avatar {
   align-items: center;
-  background: #f2f2f7;
+  background: #f3f4f6;
   border-radius: 999px;
-  color: #1d1d1f;
+  color: #374151;
   display: inline-flex;
   flex-shrink: 0;
-  font-size: 13px;
-  font-weight: 800;
-  height: 24px;
+  font-size: 12px;
+  font-weight: 700;
+  height: 22px;
   justify-content: center;
   text-transform: uppercase;
-  width: 24px;
+  width: 22px;
 }
 
 .rg-person-node strong {
-  font-size: 9.5px;
-  font-weight: 800;
-  line-height: 1.05;
-  margin-top: 3px;
-  max-width: 54px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  margin-top: 2px;
+  max-width: 52px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .rg-person-node small {
-  color: #6e6e73;
-  font-size: 8.5px;
-  font-weight: 700;
+  color: #9ca3af;
+  font-size: 8px;
+  font-weight: 600;
   line-height: 1;
-  margin-top: 2px;
-  max-width: 54px;
+  margin-top: 1px;
+  max-width: 52px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+/* ─── Edges ──────────────────────────────────────────────────── */
+
 .react-flow__edge.tag-edge .react-flow__edge-path {
-  stroke: #8d97a7;
+  stroke: #d1d5db;
   stroke-linecap: round;
   transition: opacity 0.18s ease, stroke 0.18s ease;
 }
 
 .react-flow__edge.tag-edge.weak .react-flow__edge-path {
-  stroke: #a7b0bd;
+  stroke: #e5e7eb;
 }
 
 .react-flow__edge.tag-edge.medium .react-flow__edge-path {
-  stroke: #7e8998;
+  stroke: #d1d5db;
 }
 
 .react-flow__edge.tag-edge.strong .react-flow__edge-path {
-  stroke: #465364;
+  stroke: #9ca3af;
 }
 
 .react-flow__edge.tag-edge.membership .react-flow__edge-path {
-  stroke: #b7c0cc;
+  stroke: #e5e7eb;
   stroke-dasharray: 5 5;
 }
 
 .react-flow__edge.tag-edge.faded {
-  opacity: 0.12;
+  opacity: 0.1;
 }
 
 .react-flow__edge.tag-edge.incident .react-flow__edge-path {
-  stroke: #7f97b8 !important;
+  stroke: #10b981 !important;
+  opacity: 0.5;
 }
 
+/* Level-of-detail classes */
 .lod-overview .tag-count,
 .lod-overview .rg-person-node,
 .lod-overview .react-flow__edge.membership {
@@ -690,7 +715,7 @@ button:has(img[alt="Inspector logo"]) {
 }
 
 .lod-overview .tag-label {
-  font-size: 12.5px;
+  font-size: 12px;
 }
 
 .lod-cluster .rg-person-node small {
@@ -701,71 +726,76 @@ button:has(img[alt="Inspector logo"]) {
   font-size: 11px;
 }
 
-/* ─── Graph legend (top-left) ────────────────────────────────── */
+/* ─── Graph legend ───────────────────────────────────────────── */
 
 .graph-legend {
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(10px) saturate(1.3);
+  /* Solid white — no blur */
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: none;
   border: 1px solid var(--line);
-  border-radius: 10px;
-  box-shadow: var(--sh-2);
+  border-radius: var(--r-md);
+  box-shadow: var(--sh-1);
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  left: 16px;
-  padding: 9px 13px;
+  gap: 11px;
+  left: 14px;
+  padding: 7px 12px;
   position: absolute;
-  top: 16px;
+  top: 14px;
   z-index: 11;
 }
 
 .graph-legend span {
   align-items: center;
-  color: var(--ink-soft);
+  color: var(--muted);
   display: inline-flex;
   font-size: 11.5px;
-  font-weight: 600;
-  gap: 6px;
+  font-weight: 500;
+  gap: 5px;
 }
 
 .graph-legend i {
   border-radius: 50%;
   display: inline-block;
-  height: 11px;
-  width: 11px;
+  height: 9px;
+  width: 9px;
 }
 
 .graph-legend i.legend-updated {
-  background: #ffffff;
-  border: 3px solid #0d9488;
+  background: #ecfdf5;
+  border: 2px solid #10b981;
+  box-sizing: border-box;
 }
 
 .graph-legend i.legend-match {
-  background: var(--accent-soft);
-  border: 3px solid var(--accent-ring);
+  background: #ffffff;
+  border: 2px solid #f9ab00;
+  box-sizing: border-box;
 }
 
 .legend-note {
   border-left: 1px solid var(--line);
   color: var(--muted) !important;
   font-weight: 500 !important;
-  padding-left: 12px;
+  padding-left: 11px;
 }
+
+/* ─── Mode bar ───────────────────────────────────────────────── */
 
 .graph-mode-bar {
   align-items: center;
   background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(10px);
-  border: 1px solid #d2d2d7;
-  border-radius: 10px;
+  backdrop-filter: none;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
   box-shadow: var(--sh-1);
-  color: #1d1d1f;
+  color: var(--ink);
   display: flex;
-  gap: 8px;
-  padding: 8px 11px;
+  gap: 7px;
+  padding: 7px 10px;
   position: absolute;
-  right: 16px;
-  top: 16px;
+  right: 14px;
+  top: 14px;
   z-index: 11;
 }
 
@@ -773,18 +803,18 @@ button:has(img[alt="Inspector logo"]) {
   align-items: center;
   background: transparent;
   border: 0;
-  border-radius: 7px;
-  color: var(--accent);
+  border-radius: 6px;
+  color: #059669;
   cursor: pointer;
   display: inline-flex;
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 600;
   gap: 4px;
   padding: 3px 5px;
 }
 
 .graph-mode-bar button:hover {
-  background: var(--accent-soft);
+  background: #ecfdf5;
 }
 
 .graph-mode-bar strong,
@@ -794,46 +824,34 @@ button:has(img[alt="Inspector logo"]) {
   display: inline-flex;
   font-size: 12px;
   font-style: normal;
-  font-weight: 800;
+  font-weight: 600;
   gap: 4px;
   white-space: nowrap;
 }
 
 .graph-mode-bar em {
-  color: #6e6e73;
-  font-weight: 700;
+  color: var(--muted);
+  font-weight: 500;
 }
 
-.prm-one-page:has(.copilotKitWindow.open) .graph-mode-bar {
-  right: 16px;
-}
-
-/* ─── Explore panel (right dock over the graph) ──────────────── */
+/* ─── Explore panel ──────────────────────────────────────────── */
 
 .explore-panel {
+  /* Solid white — no blur */
   background: #ffffff;
+  backdrop-filter: none;
   border: 1px solid var(--line);
   border-radius: var(--r-lg);
-  bottom: 16px;
+  bottom: 14px;
   box-shadow: var(--sh-3);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   position: absolute;
-  right: 16px;
-  top: 16px;
+  right: 14px;
+  top: 14px;
   width: 312px;
   z-index: 14;
-  animation: slideIn 0.18s ease;
-}
-
-@keyframes slideIn {
-  from { opacity: 0; transform: translateX(8px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-.prm-one-page:has(.copilotKitWindow.open) .explore-panel {
-  right: 16px;
 }
 
 .explore-head {
@@ -842,13 +860,13 @@ button:has(img[alt="Inspector logo"]) {
   display: flex;
   gap: 8px;
   justify-content: space-between;
-  padding: 12px 13px;
+  padding: 11px 13px;
 }
 
 .explore-title {
   align-items: center;
   display: flex;
-  gap: 9px;
+  gap: 8px;
   min-width: 0;
 }
 
@@ -856,40 +874,40 @@ button:has(img[alt="Inspector logo"]) {
   color: var(--muted);
   display: block;
   font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.05em;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
 .explore-title strong {
-  font-size: 14.5px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
   letter-spacing: -0.01em;
   overflow-wrap: anywhere;
 }
 
 .explore-title .spark {
-  color: #d97706;
+  color: var(--amber-deep);
 }
 
 .tag-dot {
   border-radius: 50%;
   flex-shrink: 0;
-  height: 13px;
-  width: 13px;
+  height: 12px;
+  width: 12px;
 }
 
 .tag-dot.company {
-  background: #8b6fd6;
+  background: #10b981;
 }
 
 .tag-dot.topic {
-  background: #4ba373;
+  background: #6366f1;
 }
 
 .explore-back {
   align-items: center;
-  background: #ffffff;
+  background: transparent;
   border: 1px solid var(--line);
   border-radius: 6px;
   color: var(--muted);
@@ -897,13 +915,14 @@ button:has(img[alt="Inspector logo"]) {
   display: inline-flex;
   font-size: 12px;
   font-weight: 500;
-  gap: 5px;
-  padding: 5px 9px;
+  gap: 4px;
+  padding: 4px 8px;
 }
 
 .explore-back:hover {
   background: #f9fafb;
-  border-color: var(--line-hover);
+  border-color: #d1d5db;
+  color: var(--ink);
 }
 
 .explore-x {
@@ -920,14 +939,14 @@ button:has(img[alt="Inspector logo"]) {
 }
 
 .explore-x:hover {
-  background: var(--line-soft);
+  background: #f3f4f6;
   color: var(--ink);
 }
 
 .explore-sub {
   color: var(--muted);
   font-size: 11.5px;
-  padding: 10px 14px 4px;
+  padding: 9px 13px 4px;
 }
 
 .person-list {
@@ -935,66 +954,64 @@ button:has(img[alt="Inspector logo"]) {
   flex-direction: column;
   gap: 6px;
   overflow: auto;
-  padding: 6px 10px 12px;
+  padding: 6px 9px 10px;
 }
 
 .person-row {
   align-items: center;
   background: #ffffff;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: var(--r-md);
   cursor: pointer;
   display: flex;
   gap: 10px;
   padding: 9px 10px;
   text-align: left;
-  transition: border-color 0.12s ease, box-shadow 0.12s ease, transform 0.12s ease;
+  transition: background 0.1s ease, border-color 0.1s ease;
   width: 100%;
 }
 
 .person-row:hover {
-  border-color: #cdd9e6;
-  box-shadow: var(--sh-2);
-  transform: translateY(-1px);
+  background: #f9fafb;
+  border-color: #d1d5db;
+  box-shadow: none;
+  transform: none;
 }
 
 .person-row.updated {
-  background: linear-gradient(90deg, rgba(20, 184, 166, 0.14), #ffffff 48%);
-  border-color: #8edbd4;
-  box-shadow: inset 4px 0 0 #0d9488;
+  background: linear-gradient(90deg, #ecfdf5 0%, #ffffff 50%);
+  border-color: #a7f3d0;
+  box-shadow: inset 3px 0 0 #10b981;
 }
 
 .person-row.updated:hover {
-  border-color: #0d9488;
-  box-shadow: inset 4px 0 0 #0d9488, 0 9px 22px rgba(13, 148, 136, 0.16);
+  border-color: #10b981;
+  box-shadow: inset 3px 0 0 #10b981;
 }
 
 .person-avatar {
   align-items: center;
-  background: var(--accent-soft);
+  background: #059669;
   border-radius: 999px;
-  color: var(--accent-hover);
+  color: #ffffff;
   display: inline-flex;
   flex-shrink: 0;
-  font-size: 13px;
-  font-weight: 800;
-  height: 32px;
+  font-size: 12px;
+  font-weight: 700;
+  height: 30px;
   justify-content: center;
   text-transform: uppercase;
-  width: 32px;
+  width: 30px;
 }
 
 .person-avatar.lg {
-  border: 2px solid var(--accent-ring);
-  color: var(--accent);
   font-size: 18px;
-  height: 48px;
-  width: 48px;
+  height: 46px;
+  width: 46px;
 }
 
 .person-avatar.updated {
-  background: #0d9488;
-  box-shadow: none;
+  background: #059669;
 }
 
 .person-row-text {
@@ -1005,7 +1022,7 @@ button:has(img[alt="Inspector logo"]) {
 
 .person-row-text strong {
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 600;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1020,16 +1037,15 @@ button:has(img[alt="Inspector logo"]) {
 }
 
 .person-updated-pill {
-  background: #ccfbf1;
-  border: 1px solid #5eead4;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
   border-radius: 999px;
-  box-shadow: 0 3px 10px rgba(13, 148, 136, 0.12);
-  color: #0f766e;
+  color: #047857;
   flex: 0 0 auto;
   font-size: 10px;
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1;
-  padding: 4px 7px;
+  padding: 3px 7px;
   text-transform: uppercase;
 }
 
@@ -1052,23 +1068,23 @@ button:has(img[alt="Inspector logo"]) {
 
 .person-detail-top h2 {
   font-size: 17px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
 .person-detail-top p {
   color: var(--muted);
   font-size: 12px;
-  margin-top: 3px;
+  margin-top: 2px;
 }
 
 .person-screenshot {
-  background: #f8fbfc;
-  border: 1px solid #d7e7e5;
-  border-radius: 11px;
-  color: #17645f;
+  background: #f9fafb;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: #047857;
   display: grid;
-  gap: 7px;
+  gap: 6px;
   margin-bottom: 14px;
   overflow: hidden;
   padding: 7px;
@@ -1076,14 +1092,14 @@ button:has(img[alt="Inspector logo"]) {
 }
 
 .person-screenshot:hover {
-  border-color: #9ed1cd;
+  border-color: #a7f3d0;
   box-shadow: var(--sh-2);
 }
 
 .person-screenshot img {
   aspect-ratio: 16 / 9;
   background: #ffffff;
-  border-radius: 8px;
+  border-radius: 7px;
   object-fit: cover;
   object-position: top;
   width: 100%;
@@ -1091,7 +1107,7 @@ button:has(img[alt="Inspector logo"]) {
 
 .person-screenshot span {
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1099,28 +1115,28 @@ button:has(img[alt="Inspector logo"]) {
 
 .person-detail dl {
   display: grid;
-  gap: 9px;
+  gap: 8px;
   margin: 0;
 }
 
 .person-detail dl div {
   display: grid;
   gap: 3px;
-  grid-template-columns: 86px 1fr;
+  grid-template-columns: 78px 1fr;
 }
 
 .person-detail dt {
   color: var(--muted);
   font-size: 10.5px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
+  font-weight: 600;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
 .person-detail dd {
   color: var(--ink-soft);
   font-size: 12.5px;
-  line-height: 1.4;
+  line-height: 1.45;
   margin: 0;
   overflow-wrap: anywhere;
 }
@@ -1130,8 +1146,8 @@ button:has(img[alt="Inspector logo"]) {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-top: 14px;
-  padding-top: 13px;
+  margin-top: 13px;
+  padding-top: 12px;
 }
 
 .chip {
@@ -1139,15 +1155,15 @@ button:has(img[alt="Inspector logo"]) {
   border-radius: 999px;
   display: inline-flex;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 500;
   gap: 4px;
-  padding: 4px 9px;
+  padding: 3px 9px;
 }
 
 .chip.company {
-  background: var(--accent-soft);
-  border: 1px solid var(--accent-line);
-  color: var(--accent-hover);
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #047857;
 }
 
 .chip.topic {
@@ -1156,19 +1172,20 @@ button:has(img[alt="Inspector logo"]) {
   color: #4338ca;
 }
 
-/* match drafts inside the panel */
+/* ─── Match drafts ───────────────────────────────────────────── */
+
 .draft-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   overflow: auto;
-  padding: 12px;
+  padding: 10px;
 }
 
 .draft-item {
   border: 1px solid var(--line);
-  border-radius: 11px;
-  padding: 11px;
+  border-radius: var(--r-md);
+  padding: 11px 12px;
 }
 
 .draft-item-head {
@@ -1185,7 +1202,7 @@ button:has(img[alt="Inspector logo"]) {
   border-radius: 999px;
   color: #92400e;
   display: inline-flex;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   height: 20px;
   justify-content: center;
@@ -1198,82 +1215,84 @@ button:has(img[alt="Inspector logo"]) {
   color: var(--ink);
   cursor: pointer;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   padding: 0;
   text-align: left;
 }
 
 .draft-name:hover {
-  color: var(--accent);
-  text-decoration: underline;
+  color: #059669;
+  text-decoration: none;
 }
 
 .draft-reason {
-  color: var(--ink-soft);
+  color: var(--muted);
   font-size: 12px;
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
 .draft-message {
   background: #f9fafb;
   border: 1px solid var(--line);
-  border-radius: 7px;
+  border-radius: var(--r-sm);
   color: var(--ink-soft);
   display: block;
   font-size: 12px;
   font-style: italic;
-  line-height: 1.55;
-  margin-top: 8px;
-  padding: 9px 10px;
+  line-height: 1.5;
+  margin-top: 7px;
+  padding: 8px 10px;
 }
 
 .draft-actions {
   align-items: center;
   display: flex;
-  gap: 8px;
-  margin-top: 9px;
+  gap: 6px;
+  margin-top: 8px;
 }
 
 .draft-copy {
   align-items: center;
   background: #ffffff;
   border: 1px solid var(--line);
-  border-radius: 8px;
-  box-shadow: var(--sh-1);
-  color: var(--ink-soft);
+  border-radius: 6px;
+  box-shadow: none;
+  color: var(--muted);
   cursor: pointer;
   display: inline-flex;
-  font-size: 11px;
-  font-weight: 600;
-  gap: 5px;
-  padding: 5px 10px;
+  font-size: 11.5px;
+  font-weight: 500;
+  gap: 4px;
+  padding: 4px 9px;
+  transition: background 0.1s, border-color 0.1s;
 }
 
 .draft-copy:hover {
-  border-color: #cdd9e6;
-  box-shadow: var(--sh-2);
+  background: #f9fafb;
+  border-color: #d1d5db;
+  box-shadow: none;
 }
 
 .draft-approve {
-  background: var(--accent);
-  border: 0;
+  background: #059669;
+  border: none;
   border-radius: 6px;
-  box-shadow: none;
   color: #ffffff;
   cursor: pointer;
   font-size: 11.5px;
   font-weight: 600;
-  padding: 6px 13px;
+  padding: 5px 12px;
+  transition: background 0.1s;
 }
 
 .draft-approve:hover {
-  background: var(--accent-hover);
-  box-shadow: none;
+  background: #047857;
 }
 
 .draft-approved {
   align-items: center;
-  color: var(--accent);
+  color: #059669;
   display: inline-flex;
   font-size: 12px;
   font-weight: 600;
@@ -1282,7 +1301,6 @@ button:has(img[alt="Inspector logo"]) {
 
 /* ─── Responsive ─────────────────────────────────────────────── */
 
-/* On narrow screens the graph keeps its full viewport width. */
 @media (max-width: 900px) {
   .graph-workspace {
     width: 100vw;
@@ -1303,6 +1321,8 @@ button:has(img[alt="Inspector logo"]) {
   .graph-upload-toolbar {
     align-items: flex-start;
     grid-template-columns: 1fr;
+    min-height: auto;
+    padding: 10px 14px;
   }
 
   .upload-cluster,
@@ -1311,7 +1331,7 @@ button:has(img[alt="Inspector logo"]) {
   }
 
   .graph-stage {
-    min-height: 620px;
+    min-height: 600px;
   }
 
   .explore-panel {
@@ -1321,15 +1341,15 @@ button:has(img[alt="Inspector logo"]) {
   }
 }
 
-/* ─── App nav (Graph / Monitor) ──────────────────────────────── */
+/* ─── App nav ────────────────────────────────────────────────── */
 
 .app-nav {
   align-items: center;
+  border-left: 0;
   display: inline-flex;
   gap: 2px;
   margin-left: 0;
   padding-left: 0;
-  border-left: 0;
 }
 
 .nav-link {
@@ -1345,17 +1365,19 @@ button:has(img[alt="Inspector logo"]) {
   height: 28px;
   padding: 0 10px;
   text-decoration: none;
+  transition: background 0.1s, color 0.1s;
 }
 
 .nav-link:hover {
-  background: var(--line-soft);
+  background: #f3f4f6;
   color: var(--ink);
 }
 
+/* Active: clean dark pill instead of blue gradient */
 .nav-link.active {
   background: #111827;
   border-color: transparent;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  box-shadow: none;
   color: #ffffff;
   font-weight: 600;
 }
@@ -1365,38 +1387,21 @@ button:has(img[alt="Inspector logo"]) {
 .monitor-page {
   display: flex;
   flex-direction: column;
-  min-width: 0;
   min-height: 100vh;
+  min-width: 0;
 }
 
 .monitor-topbar {
   align-items: center;
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: saturate(1.4) blur(12px);
+  background: #ffffff;
+  backdrop-filter: none;
   border-bottom: 1px solid var(--line);
   box-shadow: var(--sh-1);
   display: flex;
   gap: 16px;
   justify-content: space-between;
-  min-height: 76px;
-  padding: 12px 18px;
-}
-
-.monitor-topbar .toolbar-brand > span {
-  background: linear-gradient(150deg, #6a5ad6 0%, #4565cf 100%);
-}
-
-.monitor-topbar .toolbar-brand h1 {
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 1.1;
-  white-space: nowrap;
-}
-
-.monitor-topbar .toolbar-brand p {
-  color: var(--muted);
-  font-size: 12px;
+  min-height: 52px;
+  padding: 0 18px;
 }
 
 .mon-grid {
@@ -1414,9 +1419,9 @@ button:has(img[alt="Inspector logo"]) {
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: var(--r-lg);
-  box-shadow: var(--sh-2);
+  box-shadow: var(--sh-1);
   min-width: 0;
-  padding: 15px;
+  padding: 14px;
 }
 
 .mon-topo-panel,
@@ -1428,15 +1433,15 @@ button:has(img[alt="Inspector logo"]) {
   align-items: center;
   color: var(--ink);
   display: flex;
-  font-size: 14px;
-  font-weight: 700;
-  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  gap: 7px;
   letter-spacing: -0.01em;
   margin-bottom: 12px;
 }
 
 .mon-panel-title svg {
-  color: var(--blue);
+  color: #059669;
 }
 
 .mon-subtitle {
@@ -1444,51 +1449,39 @@ button:has(img[alt="Inspector logo"]) {
   color: var(--ink-soft);
   display: flex;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
   gap: 6px;
-  margin: 16px 0 9px;
+  margin: 14px 0 8px;
 }
 
 .mon-topo {
+  background: #f9fafb;
   border: 1px solid var(--line-soft);
   border-radius: var(--r-md);
-  background: #f8fafc;
   overflow: hidden;
 }
 
 .topo-dag-scroll {
-  background:
-    linear-gradient(90deg, rgba(248, 251, 255, 0.98), rgba(248, 251, 255, 0)) left center / 22px 100% no-repeat,
-    linear-gradient(270deg, rgba(248, 251, 255, 0.98), rgba(248, 251, 255, 0)) right center / 22px 100% no-repeat,
-    linear-gradient(180deg, #f8fbff 0%, #f4f7fb 100%);
+  background: #f9fafb;
   overflow-x: auto;
   overflow-y: hidden;
   padding: 10px;
-  scrollbar-color: #cbd7e3 transparent;
+  scrollbar-color: #e5e7eb transparent;
   scrollbar-width: thin;
 }
 
-.topo-dag-scroll::-webkit-scrollbar {
-  height: 7px;
-}
-
-.topo-dag-scroll::-webkit-scrollbar-thumb {
-  background: #cbd7e3;
-  border-radius: 999px;
-}
-
-.topo-dag-scroll::-webkit-scrollbar-track {
-  background: transparent;
-}
+.topo-dag-scroll::-webkit-scrollbar { height: 6px; }
+.topo-dag-scroll::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 999px; }
+.topo-dag-scroll::-webkit-scrollbar-track { background: transparent; }
 
 .topo-dag-canvas {
   background:
-    linear-gradient(#f8fbff 23px, transparent 24px),
-    linear-gradient(90deg, #f8fbff 23px, transparent 24px),
+    linear-gradient(#f9fafb 23px, transparent 24px),
+    linear-gradient(90deg, #f9fafb 23px, transparent 24px),
     #ffffff;
   background-size: 24px 24px;
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: var(--r-md);
   height: 420px;
   min-width: 1040px;
   overflow: hidden;
@@ -1496,14 +1489,12 @@ button:has(img[alt="Inspector logo"]) {
 }
 
 .topo-wires {
-  color: #a9bbce;
+  color: #d1d5db;
   inset: 0;
   position: absolute;
 }
 
-.topo-wires marker path {
-  fill: currentColor;
-}
+.topo-wires marker path { fill: currentColor; }
 
 .topo-wire {
   fill: none;
@@ -1511,152 +1502,111 @@ button:has(img[alt="Inspector logo"]) {
   stroke: currentColor;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-width: 2.2;
+  stroke-width: 2;
 }
 
-.topo-wire.dashed {
-  stroke-dasharray: 6 6;
-}
+.topo-wire.dashed { stroke-dasharray: 6 6; }
 
 .topo-wire-label {
   fill: var(--muted);
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 700;
   paint-order: stroke;
   stroke: #ffffff;
   stroke-width: 4px;
 }
 
 .topo-section-label {
-  background: #eef4ff;
-  border: 1px solid #d9e6f9;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
   border-radius: 999px;
-  color: var(--blue-deep);
+  color: #047857;
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 700;
   padding: 3px 8px;
   position: absolute;
   text-transform: uppercase;
 }
 
-.topo-section-label.ingest {
-  left: 24px;
-  top: 18px;
-}
-
-.topo-section-label.match {
-  left: 24px;
-  top: 252px;
-}
+.topo-section-label.ingest { left: 24px; top: 18px; }
+.topo-section-label.match { left: 24px; top: 252px; }
 
 .topo-agent {
   background: #ffffff;
   border: 1px solid var(--line);
-  border-top: 3px solid var(--blue);
-  border-radius: 9px;
-  box-shadow: var(--sh-2);
-  padding: 9px 11px;
+  border-top: 2px solid #059669;
+  border-radius: var(--r-sm);
+  box-shadow: var(--sh-1);
+  padding: 8px 10px;
   position: absolute;
 }
 
 .topo-agent.fanout {
-  box-shadow:
-    5px 5px 0 #f0edff,
-    10px 10px 0 rgba(139, 111, 214, 0.11),
-    var(--sh-2);
+  border-top-color: #8b5cf6;
+  box-shadow: 4px 4px 0 #f5f3ff, var(--sh-1);
 }
 
-.topo-agent.compact .topo-role {
-  white-space: normal;
-}
+.topo-agent.compact .topo-role { white-space: normal; }
 
 .topo-agent-head {
   align-items: center;
   display: flex;
-  gap: 7px;
+  gap: 6px;
 }
 
 .topo-agent-head strong {
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .topo-fanout {
-  background: #eef0fb;
+  background: #f5f3ff;
   border-radius: 999px;
-  color: #4356c4;
+  color: #6d28d9;
   font-size: 10px;
   font-style: normal;
-  font-weight: 800;
+  font-weight: 700;
   margin-left: auto;
   padding: 1px 7px;
 }
 
-.topo-dot {
-  border-radius: 50%;
-  flex-shrink: 0;
-  height: 9px;
-  width: 9px;
-}
+.topo-dot { border-radius: 50%; flex-shrink: 0; height: 8px; width: 8px; }
+.topo-dot.ran { background: #10b981; box-shadow: 0 0 0 3px rgba(16,185,129,0.16); }
+.topo-dot.error { background: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,0.16); }
+.topo-dot.idle { background: #d1d5db; }
 
-.topo-dot.ran { background: #2f9e6b; box-shadow: 0 0 0 3px rgba(47, 158, 107, 0.16); }
-.topo-dot.error { background: #d2495a; box-shadow: 0 0 0 3px rgba(210, 73, 90, 0.16); }
-.topo-dot.idle { background: #c2ccd6; }
-
-.topo-role {
-  color: var(--muted);
-  font-size: 10.5px;
-  line-height: 1.25;
-  margin-top: 4px;
-}
-
-.topo-metric {
-  color: var(--ink-soft);
-  font-size: 10.5px;
-  font-weight: 600;
-  margin-top: 5px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.topo-metric.idle {
-  color: var(--muted);
-  font-weight: 500;
-}
+.topo-role { color: var(--muted); font-size: 10.5px; line-height: 1.25; margin-top: 3px; }
+.topo-metric { color: var(--ink-soft); font-size: 10.5px; font-weight: 600; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.topo-metric.idle { color: var(--muted); font-weight: 500; }
 
 .topo-io {
   align-items: center;
-  background: #f4f7fb;
-  border: 1px dashed #b7c6d6;
-  border-radius: 9px;
-  color: #46566a;
+  background: #f9fafb;
+  border: 1px dashed #d1d5db;
+  border-radius: var(--r-sm);
+  color: var(--ink-soft);
   display: flex;
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
   justify-content: center;
-  min-height: 66px;
+  min-height: 62px;
   padding: 8px 10px;
   position: absolute;
   text-align: center;
 }
 
-.topo-io.out {
-  background: #eef6f1;
-  border-color: #9dccb2;
-  color: #235a3c;
-}
+.topo-io.out { background: #ecfdf5; border-color: #a7f3d0; color: #047857; }
 
 .topo-fanout-cluster {
   background: #ffffff;
   border: 1px solid var(--line);
-  border-top: 3px solid var(--purple);
-  border-radius: 10px;
-  box-shadow: var(--sh-2);
-  padding: 9px 11px;
+  border-top: 2px solid #8b5cf6;
+  border-radius: var(--r-md);
+  box-shadow: var(--sh-1);
+  padding: 8px 10px;
   position: absolute;
 }
 
@@ -1664,179 +1614,75 @@ button:has(img[alt="Inspector logo"]) {
   display: grid;
   gap: 5px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin: 8px 0 6px;
+  margin: 7px 0 5px;
 }
 
 .topo-branches span {
-  background: #f2efff;
-  border: 1px solid #ded6fb;
+  background: #f5f3ff;
+  border: 1px solid #ddd6fe;
   border-radius: 999px;
-  color: #5a45b8;
+  color: #6d28d9;
   font-size: 10px;
-  font-weight: 800;
+  font-weight: 700;
   padding: 2px 6px;
   text-align: center;
 }
 
 .topo-memory-node {
-  background: #fff8ee;
-  border: 1px solid #f1d7a7;
-  border-radius: 10px;
-  box-shadow: var(--sh-2);
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: var(--r-md);
+  box-shadow: var(--sh-1);
   display: grid;
-  gap: 3px;
-  min-height: 60px;
+  gap: 2px;
+  min-height: 56px;
   padding: 8px 10px;
   position: absolute;
 }
 
-.topo-memory-node strong {
-  color: #7a4d12;
-  font-size: 12px;
-  font-weight: 800;
-}
+.topo-memory-node strong { color: #92400e; font-size: 12px; font-weight: 700; }
+.topo-memory-node span { color: #b45309; font-size: 10.5px; font-weight: 500; }
 
-.topo-memory-node span {
-  color: #8c6a3a;
-  font-size: 10.5px;
-  font-weight: 600;
-}
-
-.topo-edge {
-  flex: 0 0 32px;
-  height: 30px;
-  margin: 0 4px;
-  position: relative;
-}
-
-.topo-edge::before {
-  background: #b7c6d6;
-  content: "";
-  height: 2px;
-  left: 0;
-  position: absolute;
-  right: 4px;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.topo-edge::after {
-  border-bottom: 5px solid transparent;
-  border-left: 6px solid #b7c6d6;
-  border-top: 5px solid transparent;
-  content: "";
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.topo-edge span {
-  background: #ffffff;
-  border: 1px solid var(--line-soft);
-  border-radius: 999px;
-  color: var(--muted);
-  font-size: 9.5px;
-  font-weight: 700;
-  left: 50%;
-  max-width: 76px;
-  overflow: hidden;
-  padding: 1px 5px;
-  position: absolute;
-  text-overflow: ellipsis;
-  top: -7px;
-  transform: translateX(-50%);
-  white-space: nowrap;
-}
-
-/* memory panel */
-.mem-stats {
-  display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
+/* mem panel */
+.mem-stats { display: grid; gap: 10px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
 .mem-stat {
-  background: #f7f9fc;
+  background: #f9fafb;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: var(--r-md);
   display: grid;
   gap: 2px;
   padding: 10px 11px;
 }
 
-.mem-stat span {
-  color: var(--muted);
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-}
-
-.mem-stat strong {
-  align-items: center;
-  display: flex;
-  font-size: 22px;
-  font-weight: 800;
-  gap: 6px;
-}
-
-.mem-stat small {
-  color: var(--muted);
-  font-size: 11px;
-}
-
+.mem-stat span { color: var(--muted); font-size: 10.5px; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; }
+.mem-stat strong { align-items: center; display: flex; font-size: 22px; font-weight: 700; gap: 5px; }
+.mem-stat small { color: var(--muted); font-size: 11px; }
 .mem-stat.badge strong { font-size: 15px; }
-.mem-stat.badge.on strong { color: var(--green); }
+.mem-stat.badge.on strong { color: #059669; }
 .mem-stat.badge.off strong { color: var(--amber-deep); }
 
-.agent-outputs {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
+.agent-outputs { display: flex; flex-direction: column; gap: 6px; }
 
 .agent-output {
   align-items: center;
   border: 1px solid var(--line-soft);
-  border-radius: 9px;
+  border-radius: var(--r-sm);
   display: flex;
-  gap: 9px;
-  padding: 8px 10px;
+  gap: 8px;
+  padding: 7px 10px;
 }
 
-.agent-output-text {
-  display: grid;
-  min-width: 0;
-}
-
-.agent-output-text strong {
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.agent-output-text small {
-  color: var(--muted);
-  font-size: 11px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.agent-output em {
-  color: var(--ink-soft);
-  font-size: 11px;
-  font-style: normal;
-  font-weight: 700;
-  margin-left: auto;
-  white-space: nowrap;
-}
+.agent-output-text { display: grid; min-width: 0; }
+.agent-output-text strong { font-size: 12px; font-weight: 600; }
+.agent-output-text small { color: var(--muted); font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.agent-output em { color: var(--ink-soft); font-size: 11px; font-style: normal; font-weight: 600; margin-left: auto; white-space: nowrap; }
 
 .mon-empty {
   align-items: center;
-  background: #f7f9fc;
+  background: #f9fafb;
   border: 1px dashed var(--line);
-  border-radius: 10px;
+  border-radius: var(--r-md);
   color: var(--muted);
   display: flex;
   font-size: 12.5px;
@@ -1847,170 +1693,272 @@ button:has(img[alt="Inspector logo"]) {
 }
 
 /* gantt */
-.gantt {
-  min-width: 0;
-}
+.gantt { min-width: 0; }
 
 .gantt-scroll {
-  background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0)) left center / 18px 100% no-repeat,
-    linear-gradient(270deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0)) right center / 18px 100% no-repeat,
-    #fbfcfe;
+  background: #f9fafb;
   border: 1px solid var(--line-soft);
-  border-radius: 12px;
+  border-radius: var(--r-md);
   overflow-x: auto;
   padding: 8px 10px 10px;
-  scrollbar-color: #cbd7e3 transparent;
+  scrollbar-color: #e5e7eb transparent;
   scrollbar-width: thin;
 }
 
-.gantt-scroll::-webkit-scrollbar {
-  height: 7px;
-}
+.gantt-scroll::-webkit-scrollbar { height: 6px; }
+.gantt-scroll::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 999px; }
+.gantt-scroll::-webkit-scrollbar-track { background: transparent; }
 
-.gantt-scroll::-webkit-scrollbar-thumb {
-  background: #cbd7e3;
-  border-radius: 999px;
-}
+.gantt svg { display: block; min-width: 900px; }
 
-.gantt-scroll::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.gantt svg {
-  display: block;
-  min-width: 900px;
-}
-
-.mon-gantt-head {
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-
+.mon-gantt-head { align-items: center; display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; margin-bottom: 12px; }
 .mon-gantt-head .mon-panel-title { margin-bottom: 0; }
 
-.mon-run-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-}
+.mon-run-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
 
 .mon-run-tabs button {
   background: #ffffff;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--r-sm);
   color: var(--ink-soft);
   cursor: pointer;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
   max-width: 230px;
   overflow: hidden;
-  padding: 6px 11px;
+  padding: 5px 10px;
   text-overflow: ellipsis;
   white-space: nowrap;
+  transition: background 0.1s;
 }
 
-.mon-run-tabs button.active {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: #ffffff;
-}
+.mon-run-tabs button.active { background: #111827; border-color: #111827; color: #ffffff; font-weight: 600; }
+.mon-run-tabs .mon-sample { align-items: center; border-color: #a7f3d0; color: #047857; display: inline-flex; gap: 5px; }
+.mon-run-tabs .mon-sample:disabled { cursor: not-allowed; opacity: 0.55; }
 
-.mon-run-tabs .mon-sample {
-  align-items: center;
-  border-color: #cfe0f5;
-  color: var(--blue-deep);
-  display: inline-flex;
-  gap: 5px;
-}
-
-.mon-run-tabs .mon-sample:disabled { cursor: not-allowed; opacity: 0.6; }
-
-.gantt-axis {
-  fill: var(--muted);
-  font-size: 10.5px;
-  font-weight: 600;
-}
-
-.gantt-label {
-  fill: var(--ink-soft);
-  font-size: 11.5px;
-  font-weight: 600;
-}
-
+.gantt-axis { fill: var(--muted); font-size: 10.5px; font-weight: 500; }
+.gantt-label { fill: var(--ink-soft); font-size: 11.5px; font-weight: 500; }
 .gantt-label.small { font-size: 9.5px; }
+.gantt-dur { fill: var(--muted); font-size: 10.5px; font-weight: 600; }
+.gantt-dur.inside { fill: #ffffff; }
+.gantt-track { fill: #f3f4f6; }
 
-.gantt-dur {
-  fill: var(--muted);
-  font-size: 10.5px;
-  font-weight: 700;
-}
-
-.gantt-dur.inside {
-  fill: #ffffff;
-}
-
-.gantt-track { fill: #edf3f8; }
-
-.gantt-foot {
-  align-items: center;
-  border-top: 1px solid var(--line-soft);
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-  padding-top: 10px;
-}
-
-.gantt-total {
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.gantt-weave {
-  align-items: center;
-  color: var(--blue-deep);
-  display: inline-flex;
-  font-size: 12px;
-  font-weight: 700;
-  gap: 5px;
-  text-decoration: none;
-}
-
+.gantt-foot { align-items: center; border-top: 1px solid var(--line-soft); display: flex; justify-content: space-between; margin-top: 10px; padding-top: 10px; }
+.gantt-total { color: var(--muted); font-size: 12px; font-weight: 500; }
+.gantt-weave { align-items: center; color: #059669; display: inline-flex; font-size: 12px; font-weight: 600; gap: 5px; text-decoration: none; }
 .gantt-weave:hover { text-decoration: underline; }
 .gantt-weave.disabled { color: var(--muted); font-weight: 500; }
 
-@media (max-width: 900px) {
-  .mon-grid {
-    grid-template-columns: 1fr;
-  }
+@media (max-width: 900px) { .mon-grid { grid-template-columns: 1fr; } }
+@media (max-width: 1100px) { .gantt-foot { align-items: flex-start; flex-direction: column; gap: 7px; } }
+@media (max-width: 760px) { .monitor-topbar { align-items: flex-start; flex-direction: column; min-height: auto; padding: 10px 14px; } }
+@media (max-width: 680px) { .mem-stats { grid-template-columns: 1fr; } .gantt svg { min-width: 760px; } }
+
+/* ─── Copilot redesign parity ────────────────────────────────── */
+
+:root {
+  --cs-w: 376px;
 }
 
-@media (max-width: 1100px) {
-  .gantt-foot {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 7px;
-  }
+.prm-one-page:has(.copilotKitWindow.open) .graph-workspace {
+  width: calc(100vw - var(--cs-w));
 }
 
-@media (max-width: 760px) {
-  .monitor-topbar {
-    align-items: flex-start;
-    flex-direction: column;
-  }
+.copilotKitSidebar .copilotKitWindow.open,
+.copilotKitWindow.open {
+  border-left: 1px solid var(--line) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  max-width: var(--cs-w) !important;
+  width: var(--cs-w) !important;
 }
 
-@media (max-width: 680px) {
-  .mem-stats {
-    grid-template-columns: 1fr;
+.copilotKitButton,
+.copilotKitHeaderCloseButton,
+.poweredBy {
+  display: none !important;
+}
+
+.copilotKitHeader {
+  align-items: center !important;
+  background: #ffffff !important;
+  border-bottom: 1px solid var(--line) !important;
+  color: var(--ink) !important;
+  display: flex !important;
+  height: 52px !important;
+  justify-content: space-between !important;
+  padding: 0 16px !important;
+}
+
+.copilotKitHeader > div:first-child {
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.copilotKitHeader > div:first-child::after {
+  color: var(--faint);
+  content: "AI-powered matchmaking";
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0;
+  margin-top: 1px;
+}
+
+.copilotKitHeaderControls {
+  align-items: center;
+  display: inline-flex;
+  gap: 7px;
+}
+
+.copilotKitHeaderControls::before {
+  background: var(--blue);
+  border-radius: 50%;
+  content: "";
+  height: 7px;
+  width: 7px;
+}
+
+.copilotKitHeaderControls::after {
+  color: var(--faint);
+  content: "Active";
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.copilotKitChatBody,
+.copilotKitMessages,
+.copilotKitInputContainer {
+  background: #ffffff !important;
+}
+
+.copilotKitMessages {
+  justify-content: flex-start;
+}
+
+.copilotKitMessagesContainer {
+  gap: 12px;
+  padding: 16px !important;
+}
+
+.copilotKitMessage {
+  font-size: 12.5px !important;
+  line-height: 1.6 !important;
+  margin-bottom: 0 !important;
+}
+
+.copilotKitMessage.copilotKitAssistantMessage {
+  background: #f9fafb !important;
+  border: 1px solid var(--line);
+  border-radius: 10px !important;
+  color: var(--ink-soft) !important;
+  max-width: 100% !important;
+  padding: 12px 14px !important;
+}
+
+.copilotKitMessage.copilotKitAssistantMessage .copilotKitMarkdown,
+.copilotKitMessage.copilotKitAssistantMessage .copilotKitMarkdownElement {
+  color: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+.copilotKitMessage.copilotKitAssistantMessage strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.copilotKitMessage.copilotKitUserMessage {
+  background: var(--ink) !important;
+  border-radius: 12px 12px 2px 12px !important;
+  color: #ffffff !important;
+  font-size: 12.5px !important;
+  line-height: 1.55 !important;
+  max-width: 268px !important;
+  padding: 10px 13px !important;
+}
+
+.copilotKitMessage.copilotKitAssistantMessage .copilotKitMessageControls {
+  left: 0;
+  top: calc(100% + 4px);
+}
+
+.copilotKitInputContainer {
+  border-top: 1px solid var(--line);
+  border-radius: 0 !important;
+  flex-shrink: 0;
+  padding: 12px 14px !important;
+}
+
+.copilotKitInput {
+  align-items: flex-end;
+  background: #f9fafb !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 9px !important;
+  display: flex;
+  gap: 8px;
+  margin: 0 !important;
+  min-height: 52px !important;
+  padding: 10px 10px 10px 13px !important;
+  width: 100% !important;
+}
+
+.copilotKitInput > textarea {
+  color: var(--ink) !important;
+  flex: 1;
+  font-size: 13px !important;
+  height: 20px !important;
+  line-height: 1.5 !important;
+  min-height: 20px !important;
+}
+
+.copilotKitInput > textarea::placeholder {
+  color: var(--faint) !important;
+}
+
+.copilotKitInputControls {
+  align-items: center;
+  display: flex;
+  flex: 0 0 30px;
+  height: 30px;
+  justify-content: flex-end;
+}
+
+.copilotKitInputControlButton[aria-label="Send"],
+.copilotKitInputControlButton[aria-label="Stop"],
+.copilotKitInputControlButton[aria-label="Loading"] {
+  align-items: center;
+  background: var(--blue-deep) !important;
+  border-radius: 7px !important;
+  color: #ffffff !important;
+  display: inline-flex;
+  height: 30px !important;
+  justify-content: center;
+  opacity: 1;
+  width: 30px !important;
+}
+
+.copilotKitInputControlButton[aria-label="Send"]:disabled {
+  opacity: 0.55;
+}
+
+.copilotKitInputControlButton[aria-label="Send"]:not(:disabled):hover,
+.copilotKitInputControlButton[aria-label="Stop"]:hover {
+  background: var(--blue-darker) !important;
+  transform: none !important;
+}
+
+@media (max-width: 640px) {
+  .prm-one-page:has(.copilotKitWindow.open) .graph-workspace {
+    width: 100vw;
   }
 
-  .gantt svg {
-    min-width: 760px;
+  .copilotKitSidebar .copilotKitWindow.open,
+  .copilotKitWindow.open {
+    max-width: 100vw !important;
+    width: 100vw !important;
   }
 }

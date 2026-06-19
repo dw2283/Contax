@@ -256,6 +256,7 @@ export default function Page() {
         clickOutsideToClose={false}
         labels={{
           title: "Network Copilot",
+          placeholder: "Ask about your network…",
           initial:
             'Tell me who you need. e.g. "Find someone in SF who knows GPU kernels" — I will highlight the matching tags on the graph and draft an intro.',
         }}
