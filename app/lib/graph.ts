@@ -48,6 +48,7 @@ const FOCUS_LIMITS: Record<GraphLod, { people: number; relatedTags: number; pers
 type BuildGraphOptions = {
   focusTagId?: string | null;
   highlightedTags?: Set<string>;
+  highlightedPersonIds?: Set<string>;
   lod?: GraphLod;
   selectedPersonId?: string | null;
 };
@@ -165,8 +166,8 @@ function tagSize(count: number): number {
   return 58 + Math.min(30, Math.sqrt(count) * 5.2 + count * 0.9);
 }
 
-function personSize(): number {
-  return 64;
+function personSize(updated = false): number {
+  return updated ? 50 : 44;
 }
 
 function linkEndpointId(endpoint: string | SimNode): string {
@@ -339,7 +340,7 @@ function simTagNodeToFlowNode(node: SimNode, highlightedTags: Set<string>, selec
   };
 }
 
-function simPersonNodeToFlowNode(node: SimNode, selectedPersonId?: string | null): PRMNode {
+function simPersonNodeToFlowNode(node: SimNode, selectedPersonId?: string | null, highlightedPersonIds?: Set<string>): PRMNode {
   const person = node.person!;
   return {
     id: node.id,
@@ -352,6 +353,7 @@ function simPersonNodeToFlowNode(node: SimNode, selectedPersonId?: string | null
       subtitle: [person.role, person.company].filter(Boolean).join(" @ ") || "Unknown contact",
       sourceLabel: sourceLabel(person.source),
       size: node.size,
+      highlighted: highlightedPersonIds?.has(person.id) ?? false,
       selected: selectedPersonId === person.id,
       updated: isUpdatedContactPerson(person),
     },
@@ -479,6 +481,7 @@ function buildFocusGraph(
   lod: GraphLod,
   highlightedTags: Set<string>,
   selectedPersonId?: string | null,
+  highlightedPersonIds?: Set<string>,
 ): { nodes: PRMNode[]; edges: Edge[] } {
   const tagMap = buildTagCounts(people);
   const focusTag = tagMap.get(focusTagId);
@@ -499,7 +502,7 @@ function buildFocusGraph(
       label: person.name,
       count: 1,
       updatedCount: 0,
-      size: personSize(),
+      size: personSize(highlightedPersonIds?.has(person.id) || isUpdatedContactPerson(person)),
       person,
       score: personRank(person),
     })),
@@ -548,7 +551,7 @@ function buildFocusGraph(
   return {
     nodes: simNodes.map((node) =>
       node.nodeKind === "person"
-        ? simPersonNodeToFlowNode(node, selectedPersonId)
+        ? simPersonNodeToFlowNode(node, selectedPersonId, highlightedPersonIds)
         : simTagNodeToFlowNode(node, highlightedTags, node.id === focusTagId),
     ),
     edges: simLinks.map(toEdge),
@@ -558,8 +561,9 @@ function buildFocusGraph(
 export function buildTagGraph(people: Person[], options: BuildGraphOptions = {}): { nodes: PRMNode[]; edges: Edge[] } {
   const lod = options.lod ?? "cluster";
   const highlightedTags = options.highlightedTags ?? new Set<string>();
+  const highlightedPersonIds = options.highlightedPersonIds ?? new Set<string>();
   if (options.focusTagId) {
-    return buildFocusGraph(people, options.focusTagId, lod, highlightedTags, options.selectedPersonId);
+    return buildFocusGraph(people, options.focusTagId, lod, highlightedTags, options.selectedPersonId, highlightedPersonIds);
   }
   return buildGlobalGraph(people, lod, highlightedTags);
 }

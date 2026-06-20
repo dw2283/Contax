@@ -31,6 +31,7 @@ function lodLabel(lod: GraphLod): string {
 type GraphCanvasProps = {
   people: Person[];
   highlightedTags: Set<string>;
+  highlightedPersonIds: Set<string>;
   selectedTagId: string | null;
   selectedPerson: Person | null;
   onSelectTag: (id: string) => void;
@@ -42,6 +43,7 @@ type GraphCanvasProps = {
 export function GraphCanvas({
   people,
   highlightedTags,
+  highlightedPersonIds,
   selectedTagId,
   selectedPerson,
   onSelectTag,
@@ -57,10 +59,11 @@ export function GraphCanvas({
       buildTagGraph(people, {
         focusTagId: selectedTagId,
         highlightedTags,
+        highlightedPersonIds,
         lod,
         selectedPersonId: selectedPerson?.id ?? null,
       }),
-    [people, selectedTagId, highlightedTags, lod, selectedPerson],
+    [people, selectedTagId, highlightedTags, highlightedPersonIds, lod, selectedPerson],
   );
   const layoutKey = useMemo(
     () => `${selectedTagId ?? "global"}|${people.map((person) => person.id).sort().join("|")}`,

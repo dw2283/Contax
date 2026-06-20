@@ -594,77 +594,116 @@ button:has(img[alt="Inspector logo"]) {
   background: transparent;
   border: 0;
   box-shadow: none;
+  overflow: visible;
   padding: 0;
 }
 
 .rg-person-node {
   align-items: center;
-  background: #ffffff;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 50%;
+  background: transparent;
+  border: 0;
   box-shadow: none;
   color: #111827;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 5px;
+  overflow: visible;
+  padding: 0;
   position: relative;
   text-align: center;
-  transition: border-color 0.12s ease, transform 0.12s ease;
+  transition: transform 0.12s ease;
 }
 
 .rg-person-node:hover {
-  background: #f9fafb;
-  border-color: #d1d5db;
   transform: translateY(-1px);
 }
 
-.rg-person-node.selected {
+.rg-person-node:hover .rg-person-avatar {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.rg-person-node.selected .rg-person-avatar {
   border-color: #059669;
   box-shadow: 0 0 0 2px #059669;
 }
 
-.rg-person-node.updated {
+.rg-person-node.highlighted .rg-person-avatar {
+  background: #ecfdf5;
+  border-color: #10b981;
+  border-width: 2px;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+.rg-person-node.updated .rg-person-avatar {
   background: #ecfdf5;
   border-color: #10b981;
 }
 
 .rg-person-avatar {
   align-items: center;
-  background: #f3f4f6;
+  background: #ffffff;
+  border: 1.5px solid #e5e7eb;
   border-radius: 999px;
   color: #374151;
   display: inline-flex;
   flex-shrink: 0;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
-  height: 22px;
+  height: 100%;
   justify-content: center;
+  position: relative;
   text-transform: uppercase;
-  width: 22px;
+  width: 100%;
+  z-index: 1;
 }
 
-.rg-person-node strong {
-  font-size: 9px;
+.rg-person-label {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  left: 50%;
+  max-width: 88px;
+  pointer-events: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  transform: translateX(-50%);
+  width: max-content;
+  z-index: 2;
+}
+
+.rg-person-label strong {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(209, 213, 219, 0.78);
+  border-radius: 999px;
+  color: #111827;
+  display: -webkit-box;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   line-height: 1.1;
-  margin-top: 2px;
-  max-width: 52px;
+  max-width: 88px;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
+  padding: 2px 6px;
+  text-overflow: clip;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
-.rg-person-node small {
+.rg-person-label small {
+  background: rgba(249, 250, 251, 0.92);
+  border: 1px solid rgba(229, 231, 235, 0.9);
+  border-radius: 999px;
   color: #9ca3af;
   font-size: 8px;
   font-weight: 600;
   line-height: 1;
-  margin-top: 1px;
-  max-width: 52px;
+  margin-top: 2px;
+  max-width: 76px;
   overflow: hidden;
+  padding: 2px 5px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -2028,9 +2067,27 @@ button:has(img[alt="Inspector logo"]) {
 }
 
 .copilotKitButton,
-.copilotKitHeaderCloseButton,
 .poweredBy {
   display: none !important;
+}
+
+.copilotKitHeaderCloseButton {
+  align-items: center !important;
+  background: #f9fafb !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 6px !important;
+  color: var(--muted) !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  height: 26px !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  width: 26px !important;
+}
+
+.copilotKitHeaderCloseButton:hover {
+  background: #f3f4f6 !important;
+  color: var(--ink) !important;
 }
 
 .copilotKitHeader {
@@ -2215,4 +2272,64 @@ button:has(img[alt="Inspector logo"]) {
     max-width: 100vw !important;
     width: 100vw !important;
   }
+}
+
+/* ─── Copilot collapsed strip ────────────────────────────────── */
+
+.copilot-strip {
+  align-items: center;
+  background: #ffffff;
+  border-left: 1px solid var(--line);
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 10px 0 16px;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 48px;
+  z-index: 30;
+}
+
+.copilot-strip-toggle {
+  align-items: center;
+  background: #f9fafb;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: #6b7280;
+  cursor: pointer;
+  display: flex;
+  flex-shrink: 0;
+  height: 32px;
+  justify-content: center;
+  width: 32px;
+}
+
+.copilot-strip-toggle:hover {
+  background: #f3f4f6;
+  color: var(--ink);
+}
+
+.copilot-strip-dot {
+  background: #10b981;
+  border-radius: 50%;
+  flex-shrink: 0;
+  height: 6px;
+  width: 6px;
+}
+
+.copilot-strip-label {
+  color: #c4c9d2;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transform: rotate(180deg);
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+}
+
+.prm-one-page:has(.copilot-strip) .graph-workspace {
+  width: calc(100vw - 48px);
 }

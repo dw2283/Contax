@@ -35,15 +35,17 @@ export function PersonNode({ data }: NodeProps<PRMNode>) {
 
   return (
     <div
-      className={`rg-person-node ${data.updated ? "updated" : ""} ${data.selected ? "selected" : ""}`}
+      className={`rg-person-node ${data.highlighted ? "highlighted" : ""} ${data.updated ? "updated" : ""} ${data.selected ? "selected" : ""}`}
       style={{ width: data.size, height: data.size } as CSSProperties}
       title={`${data.label} · ${data.subtitle}`}
     >
       <Handle className="tag-center-handle" id="src" type="source" position={Position.Top} />
       <Handle className="tag-center-handle" id="tgt" type="target" position={Position.Top} />
       <span className="rg-person-avatar">{data.label.slice(0, 1)}</span>
-      <strong>{data.label}</strong>
-      <small>{data.sourceLabel}</small>
+      <span className="rg-person-label">
+        <strong>{data.label}</strong>
+        <small>{data.sourceLabel}</small>
+      </span>
     </div>
   );
 }

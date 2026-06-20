@@ -1,8 +1,8 @@
 "use client";
 
 import { useCopilotAction, useCopilotReadable } from "@copilotkit/react-core";
-import { CopilotSidebar } from "@copilotkit/react-ui";
-import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
+import { CopilotSidebar, useChatContext } from "@copilotkit/react-ui";
+import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ExplorePanel } from "./components/ExplorePanel";
 import { GraphCanvas } from "./components/GraphCanvas";
 import { Toolbar } from "./components/Toolbar";
@@ -12,6 +12,14 @@ import { fetchStatus, type MonitorRun } from "./lib/monitor";
 import type { Person, Recommendation, UploadItem } from "./lib/types";
 
 const DEMO_PEOPLE_SIZE = 100;
+
+function CopilotToggleBridge({ onCapture }: { onCapture: (setOpen: (v: boolean) => void) => void }) {
+  const { setOpen } = useChatContext();
+  useEffect(() => {
+    onCapture(setOpen);
+  }, [setOpen, onCapture]);
+  return null;
+}
 
 function latestTraceRun(runs: { ingest?: MonitorRun; match?: MonitorRun }): MonitorRun | undefined {
   return [runs.match, runs.ingest]
@@ -37,7 +45,13 @@ export default function Page() {
   const [isIngesting, setIsIngesting] = useState(false);
   const [isSeeding, setIsSeeding] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [copilotOpen, setCopilotOpen] = useState(true);
+  const copilotSetOpenRef = useRef<((v: boolean) => void) | null>(null);
   const didAutoLoad = useRef(false);
+
+  const captureSetOpen = useCallback((setOpen: (v: boolean) => void) => {
+    copilotSetOpenRef.current = setOpen;
+  }, []);
 
   // Load persisted people only; demo seeding stays explicit so real-contact mode does not repopulate demo data.
   useEffect(() => {
@@ -51,6 +65,12 @@ export default function Page() {
   // Tags carried by the top matches glow yellow on the graph.
   const highlightedTags = useMemo(
     () => matchedTagIds(recommendations.slice(0, 3).map((item) => item.person)),
+    [recommendations],
+  );
+
+  // Person IDs from AI matchmaker results — used to enlarge and highlight matched person nodes.
+  const highlightedPersonIds = useMemo(
+    () => new Set(recommendations.map((r) => r.person.id)),
     [recommendations],
   );
 
@@ -225,6 +245,7 @@ export default function Page() {
         <GraphCanvas
           people={people}
           highlightedTags={highlightedTags}
+          highlightedPersonIds={highlightedPersonIds}
           selectedTagId={selectedTagId}
           selectedPerson={selectedPerson}
           onSelectTag={(id) => {
@@ -251,9 +272,26 @@ export default function Page() {
         </GraphCanvas>
       </section>
 
+      {!copilotOpen && (
+        <aside className="copilot-strip">
+          <button
+            className="copilot-strip-toggle"
+            onClick={() => copilotSetOpenRef.current?.(true)}
+            title="Expand Network Copilot"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
+          <span className="copilot-strip-dot" />
+          <span className="copilot-strip-label">Network Copilot</span>
+        </aside>
+      )}
+
       <CopilotSidebar
         defaultOpen
         clickOutsideToClose={false}
+        onSetOpen={setCopilotOpen}
         labels={{
           title: "Network Copilot",
           placeholder: "Ask about your network…",
@@ -265,7 +303,9 @@ export default function Page() {
           "Whenever the user describes a need or asks who to talk to, call the findPeople action. " +
           "After it returns, summarize the top matches in a sentence or two and mention the intro drafts are ready to review."
         }
-      />
+      >
+        <CopilotToggleBridge onCapture={captureSetOpen} />
+      </CopilotSidebar>
     </main>
   );
 }
